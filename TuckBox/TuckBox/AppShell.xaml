@@ -16,6 +16,10 @@
     <ShellContent Route="Login"
                 ContentTemplate="{DataTemplate views:Login}" />
 
+    <!-- Register -->
+    <ShellContent Route="Register"
+                ContentTemplate="{DataTemplate views:Register}" />
+
     <!-- Main (root namespace, not Views) -->
     <ShellContent Route="Main"
                 ContentTemplate="{DataTemplate pages:MainPage}" />
