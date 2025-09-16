@@ -82,6 +82,8 @@ public class FirebaseAuthService
 
             var callbackUrl = new Uri(redirectUri);
 
+            System.Diagnostics.Debug.WriteLine($"[DEBUG] Using redirectUri: {redirectUri}");
+
             var result = await WebAuthenticator.Default.AuthenticateAsync(authUrl, callbackUrl);
 
             // Grab the ID token from result

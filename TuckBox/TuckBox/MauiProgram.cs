@@ -48,20 +48,17 @@ namespace TuckBox
                 using var stream = FileSystem.OpenAppPackageFileAsync("appsettings.json").Result;
                 using var reader = new StreamReader(stream);
                 var json = reader.ReadToEnd();
-                System.Diagnostics.Debug.WriteLine($"[DEBUG] appsettings.json content: {json}");
-
-                var cfg = JsonSerializer.Deserialize<Dictionary<string, string>>(json)!;
-
-                // Safer reads with helpful errors:
-                if (!cfg.TryGetValue("GoogleClientId", out var googleClientId))
-                    throw new Exception("GoogleClientId missing from appsettings.json in package");
-                if (!cfg.TryGetValue("GoogleRedirectUri", out var googleRedirectUri))
-                    throw new Exception("GoogleRedirectUri missing from appsettings.json in package");
+                var cfg = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(json)!;
 
                 var auth = sp.GetRequiredService<FirebaseAuthService>();
-                return new LoginViewModel(auth, googleClientId, googleRedirectUri);
+                var googleClientId = cfg["GoogleClientId"];
+                var googleRedirectUri = cfg["GoogleRedirectUri"];
 
+                System.Diagnostics.Debug.WriteLine($"[DEBUG] DI GoogleRedirectUri: {googleRedirectUri}");
+
+                return new LoginViewModel(auth, googleClientId, googleRedirectUri);
             });
+
 
             // Register VM
             builder.Services.AddTransient<RegisterViewModel>();

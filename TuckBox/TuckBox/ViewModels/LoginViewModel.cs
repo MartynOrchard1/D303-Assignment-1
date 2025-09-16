@@ -52,6 +52,7 @@ public partial class LoginViewModel : ObservableObject
         await Shell.Current.GoToAsync("//Register");
     }
 
+    [RelayCommand]
     private async Task LoginWithGoogleAsync()
     {
         System.Diagnostics.Debug.WriteLine("[DEBUG] Google login tapped.");
