@@ -73,12 +73,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\Splash.xaml.cs">
-	    <DependentUpon>Splash.xaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
+	  <MauiXaml Update="Views\Login.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Splash.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

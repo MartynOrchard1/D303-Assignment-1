@@ -12,11 +12,21 @@ namespace TuckBox
             InitializeComponent();
             _db = db;
 
-            // Set a quick splash or shell immediately; init runs in background
-            MainPage = new AppShell();
-
             // fire-and-forget app initialization
             _ = InitializeAsync();
+        }
+
+        protected override Window CreateWindow(IActivationState? activationState)
+        {
+            var window = base.CreateWindow(activationState);
+
+            // Start with AppShell
+            window.Page = new AppShell();
+
+            // Optionally force initial route (Splash)
+            _ = Shell.Current.GoToAsync("//Splash");
+
+            return window;
         }
 
         private async Task InitializeAsync()
