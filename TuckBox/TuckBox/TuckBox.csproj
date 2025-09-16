@@ -70,7 +70,18 @@
 	<ItemGroup>
 	  <Folder Include="ViewModels\" />
 	  <Folder Include="Services\" />
-	  <Folder Include="Views\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Views\Splash.xaml.cs">
+	    <DependentUpon>Splash.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\Splash.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>
