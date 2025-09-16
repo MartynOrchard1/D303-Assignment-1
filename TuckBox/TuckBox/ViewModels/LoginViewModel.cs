@@ -7,15 +7,19 @@ namespace TuckBox.ViewModels;
 public partial class LoginViewModel : ObservableObject
 {
     private readonly FirebaseAuthService _auth;
+    private readonly string _googleClientId;
+    private readonly string _googleRedirectUri;
 
     [ObservableProperty] private string email = "";
     [ObservableProperty] private string password = "";
     [ObservableProperty] private string statusMessage = "";
 
-    public LoginViewModel(FirebaseAuthService auth)
+    public LoginViewModel(FirebaseAuthService auth, string googleClientId, string googleRedirectUri)
     {
         _auth = auth;
-        System.Diagnostics.Debug.WriteLine("[DEBUG] LoginViewModel initialized.");
+        _googleClientId = googleClientId;
+        _googleRedirectUri = googleRedirectUri;
+        System.Diagnostics.Debug.WriteLine("[DEBUG] LoginViewModel initialized for Google sign-in.");
     }
 
     [RelayCommand]
@@ -39,10 +43,29 @@ public partial class LoginViewModel : ObservableObject
         }
     }
 
+
+
     [RelayCommand]
     private async Task GoToRegisterAsync()
     {
         System.Diagnostics.Debug.WriteLine("[DEBUG] Navigating to Register page.");
         await Shell.Current.GoToAsync("//Register");
+    }
+
+    private async Task LoginWithGoogleAsync()
+    {
+        System.Diagnostics.Debug.WriteLine("[DEBUG] Google login tapped.");
+        var uid = await _auth.SignInWithGoogleAsync(_googleClientId, _googleRedirectUri);
+
+        if (uid != null)
+        {
+            System.Diagnostics.Debug.WriteLine($"[DEBUG] Google login success. Firebase UID={uid}");
+            await Shell.Current.GoToAsync("//Main");
+        }
+        else
+        {
+            System.Diagnostics.Debug.WriteLine("[DEBUG] Google login failed.");
+            StatusMessage = "Google sign-in failed. Try again.";
+        }
     }
 }

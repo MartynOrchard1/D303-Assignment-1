@@ -7,11 +7,12 @@
         <Entry Placeholder="Email" Text="{Binding Email}" />
         <Entry Placeholder="Password" IsPassword="True" Text="{Binding Password}" />
 
-        <Button Text="Login"
-                Command="{Binding LoginCommand}" />
+        <Button Text="Login" Command="{Binding LoginCommand}" />
+        <Button Text="Go to Register" Command="{Binding GoToRegisterCommand}" />
 
-        <Button Text="Go to Register"
-                Command="{Binding GoToRegisterCommand}" />
+        <BoxView HeightRequest="1" Opacity="0.1" />
+        <Button Text="Continue with Google"
+            Command="{Binding LoginWithGoogleCommand}" />
 
         <Label Text="{Binding StatusMessage}" TextColor="Red" />
     </VerticalStackLayout>
