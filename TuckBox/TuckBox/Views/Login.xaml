@@ -4,10 +4,15 @@
              x:Class="TuckBox.Views.Login"
              Title="Login">
     <VerticalStackLayout Padding="24" Spacing="12">
-        <Label Text="Welcome back" FontSize="24" />
-        <Entry Placeholder="Email" />
-        <Entry Placeholder="Password" IsPassword="True" />
-        <Button Text="Sign in" />
-        <Button Text="Create an account" />
+        <Entry Placeholder="Email" Text="{Binding Email}" />
+        <Entry Placeholder="Password" IsPassword="True" Text="{Binding Password}" />
+
+        <Button Text="Login"
+                Command="{Binding LoginCommand}" />
+
+        <Button Text="Go to Register"
+                Command="{Binding GoToRegisterCommand}" />
+
+        <Label Text="{Binding StatusMessage}" TextColor="Red" />
     </VerticalStackLayout>
 </ContentPage>

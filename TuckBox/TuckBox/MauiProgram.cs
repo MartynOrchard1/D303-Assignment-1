@@ -52,18 +52,11 @@ namespace TuckBox
                 return new FirebaseAuthService(apiKey);
             });
 
-
-
             // ViewModels
             builder.Services.AddTransient<LoginViewModel>(sp =>
             {
                 var auth = sp.GetRequiredService<FirebaseAuthService>();
-                // Inject the real API key so ViewModel can expose it
-                var vm = new LoginViewModel(auth)
-                {
-                    ApiKey = "Loaded: " + "AIzaSyBfCXZyIi6VB0SMjyjVDWVj7EEuUI3OHtY" // or config value
-                };
-                return vm;
+                return new LoginViewModel(auth);
             });
 
 

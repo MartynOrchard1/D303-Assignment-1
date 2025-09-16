@@ -5,41 +5,19 @@
              Title="Register">
     <ScrollView>
         <VerticalStackLayout Padding="24" Spacing="12">
-            <Label Text="Create Account"
-                   FontSize="28"
-                   HorizontalOptions="Center" />
-
-            <Entry Placeholder="First Name" 
-                   Text="{Binding FirstName}" />
-
-            <Entry Placeholder="Last Name" 
-                   Text="{Binding LastName}" />
-
-            <Entry Placeholder="Email" 
-                   Keyboard="Email"
-                   Text="{Binding Email}" />
-
-            <Entry Placeholder="Password" 
-                   IsPassword="True"
-                   Text="{Binding Password}" />
-
-            <Entry Placeholder="Mobile" 
-                   Keyboard="Telephone"
-                   Text="{Binding Mobile}" />
+            <Entry Placeholder="First Name" Text="{Binding FirstName}" />
+            <Entry Placeholder="Last Name" Text="{Binding LastName}" />
+            <Entry Placeholder="Email" Text="{Binding Email}" />
+            <Entry Placeholder="Password" IsPassword="True" Text="{Binding Password}" />
+            <Entry Placeholder="Mobile" Text="{Binding Mobile}" />
 
             <Button Text="Register"
-                    Command="{Binding RegisterCommand}"
-                    BackgroundColor="#4CAF50"
-                    TextColor="White" />
+                    Command="{Binding RegisterCommand}" />
 
             <Button Text="Back to Login"
-                    Command="{Binding GoToLoginCommand}"
-                    BackgroundColor="#2196F3"
-                    TextColor="White" />
+                    Command="{Binding GoToLoginCommand}" />
 
-            <Label Text="{Binding StatusMessage}" 
-                   TextColor="Red"
-                   HorizontalOptions="Center" />
+            <Label Text="{Binding StatusMessage}" TextColor="Red" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
