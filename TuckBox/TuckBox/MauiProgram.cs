@@ -54,7 +54,9 @@ namespace TuckBox
                 var googleClientId = cfg["GoogleClientId"];
                 var googleRedirectUri = cfg["GoogleRedirectUri"];
 
-                System.Diagnostics.Debug.WriteLine($"[DEBUG] DI GoogleRedirectUri: {googleRedirectUri}");
+                System.Diagnostics.Debug.WriteLine($"[DEBUG] DI GoogleClientId: {cfg["GoogleClientId"]}");
+                System.Diagnostics.Debug.WriteLine($"[DEBUG] DI GoogleRedirectUri: {cfg["GoogleRedirectUri"]}");
+
 
                 return new LoginViewModel(auth, googleClientId, googleRedirectUri);
             });
