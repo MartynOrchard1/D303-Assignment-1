@@ -6,9 +6,12 @@
     xmlns:local="clr-namespace:TuckBox"
     Title="TuckBox">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <!-- Splash (default) -->
+    <ShellContent Route="Splash" ContentTemplate="{DataTemplate views:Splash}" />
 
+    <!-- Login -->
+    <ShellContent Route="Login" ContentTemplate="{DataTemplate views:Login}" />
+
+    <!-- Main -->
+    <ShellContent Route="Main" ContentTemplate="{DataTemplate views:MainPage}" />
 </Shell>
