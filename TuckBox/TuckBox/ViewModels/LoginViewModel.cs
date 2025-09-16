@@ -55,8 +55,10 @@ public partial class LoginViewModel : ObservableObject
     [RelayCommand]
     private async Task LoginWithGoogleAsync()
     {
-        System.Diagnostics.Debug.WriteLine("[DEBUG] Google login tapped.");
-        var uid = await _auth.SignInWithGoogleAsync(_googleClientId, _googleRedirectUri);
+        var httpsRedirect = _googleRedirectUri; // from appsettings, e.g. https://MartynOrchard1.github.io/
+        var customCallback = "com.googleusercontent.apps.971309845644-atoo2nl2ceqjvbdhmo4iqdt7othvkr09:/oauth2redirect";
+
+        var uid = await _auth.SignInWithGoogleAsync(_googleClientId, httpsRedirect, customCallback);
 
         if (uid != null)
         {

@@ -67,11 +67,15 @@ public class FirebaseAuthService
     }
 
     // Google sign-in via WebAuthenticator, then exchange with Firebase
-    public async Task<string?> SignInWithGoogleAsync(string googleClientId, string redirectUri)
+    public async Task<string?> SignInWithGoogleAsync(
+    string googleClientId,
+    string authRedirectUriHttps,     // e.g. https://MartynOrchard1.github.io/
+    string appCallbackUriCustom      // e.g. com.google...:/oauth2redirect
+)
     {
         try
         {
-            // 1) PKCE: make a code_verifier and code_challenge (S256)
+            // PKCE
             var codeVerifier = MakeCodeVerifier();
             var codeChallenge = MakeCodeChallenge(codeVerifier);
 
@@ -79,7 +83,7 @@ public class FirebaseAuthService
             var authorizeUrl =
                 "https://accounts.google.com/o/oauth2/v2/auth" +
                 $"?client_id={Uri.EscapeDataString(googleClientId)}" +
-                $"&redirect_uri={Uri.EscapeDataString(redirectUri)}" +
+                $"&redirect_uri={Uri.EscapeDataString(authRedirectUriHttps)}" + // 🔸 HTTPS bridge
                 $"&response_type=code" +
                 $"&scope={Uri.EscapeDataString(scope)}" +
                 $"&code_challenge={Uri.EscapeDataString(codeChallenge)}" +
@@ -87,71 +91,54 @@ public class FirebaseAuthService
                 $"&prompt=select_account";
 
             var authUrl = new Uri(authorizeUrl);
-            var callbackUrl = new Uri(redirectUri);
+            var callbackUrl = new Uri(appCallbackUriCustom);                    // 🔸 custom scheme
 
             System.Diagnostics.Debug.WriteLine($"[DEBUG] Using client_id: {googleClientId}");
-            System.Diagnostics.Debug.WriteLine($"[DEBUG] Using redirectUri: {redirectUri}");
+            System.Diagnostics.Debug.WriteLine($"[DEBUG] Auth redirect (HTTPS): {authRedirectUriHttps}");
+            System.Diagnostics.Debug.WriteLine($"[DEBUG] App callback (custom): {appCallbackUriCustom}");
 
-            // 2) Get authorization code from Google
+            // Browser → HTTPS page → page JS redirects to custom scheme → this callback fires:
             var result = await WebAuthenticator.Default.AuthenticateAsync(authUrl, callbackUrl);
 
-            string? authCode = null;
-            if (!result.Properties.TryGetValue("code", out authCode) || string.IsNullOrEmpty(authCode))
+            if (!result.Properties.TryGetValue("code", out var authCode) || string.IsNullOrEmpty(authCode))
             {
                 System.Diagnostics.Debug.WriteLine("[DEBUG] Google Auth: missing 'code' in result.");
                 return null;
             }
 
-            // 3) Exchange code for tokens at Google (with PKCE verifier)
-            var tokenReq = new HttpRequestMessage(HttpMethod.Post, "https://oauth2.googleapis.com/token")
-            {
-                Content = new FormUrlEncodedContent(new Dictionary<string, string>
+            // Exchange code at Google token endpoint (must use the SAME HTTPS redirect you sent above)
+            var tokenResp = await _http.PostAsync("https://oauth2.googleapis.com/token",
+                new FormUrlEncodedContent(new Dictionary<string, string>
                 {
                     ["code"] = authCode,
                     ["client_id"] = googleClientId,
                     ["code_verifier"] = codeVerifier,
-                    ["redirect_uri"] = redirectUri,
+                    ["redirect_uri"] = authRedirectUriHttps,  // 🔸 must match auth step
                     ["grant_type"] = "authorization_code"
-                })
-            };
+                }));
 
-            var tokenResp = await _http.SendAsync(tokenReq);
             var tokenBody = await tokenResp.Content.ReadAsStringAsync();
             System.Diagnostics.Debug.WriteLine($"[DEBUG] Google token status={tokenResp.StatusCode} body={tokenBody}");
+            if (!tokenResp.IsSuccessStatusCode) return null;
 
-            if (!tokenResp.IsSuccessStatusCode)
-                return null;
+            var idToken = JsonDocument.Parse(tokenBody).RootElement.GetProperty("id_token").GetString();
+            if (string.IsNullOrEmpty(idToken)) return null;
 
-            var tokenDoc = JsonDocument.Parse(tokenBody);
-            if (!tokenDoc.RootElement.TryGetProperty("id_token", out var idTokenEl))
-            {
-                System.Diagnostics.Debug.WriteLine("[DEBUG] Google token: no id_token");
-                return null;
-            }
-
-            var idToken = idTokenEl.GetString();
-            if (string.IsNullOrEmpty(idToken))
-                return null;
-
-            // 4) Exchange Google id_token with Firebase
-            var payload = new
-            {
-                postBody = $"id_token={idToken}&providerId=google.com",
-                requestUri = "http://localhost",  // required placeholder
-                returnSecureToken = true
-            };
-
+            // Exchange with Firebase
             var fbResp = await _http.PostAsJsonAsync(
-                $"https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key={_apiKey}", payload);
+                $"https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key={_apiKey}",
+                new
+                {
+                    postBody = $"id_token={idToken}&providerId=google.com",
+                    requestUri = "http://localhost",
+                    returnSecureToken = true
+                });
 
             var fbBody = await fbResp.Content.ReadAsStringAsync();
             System.Diagnostics.Debug.WriteLine($"[DEBUG] Firebase signInWithIdp status={fbResp.StatusCode} body={fbBody}");
+            if (!fbResp.IsSuccessStatusCode) return null;
 
-            if (!fbResp.IsSuccessStatusCode)
-                return null;
-
-            var fbDoc = JsonDocument.Parse(fbBody);
-            return fbDoc.RootElement.GetProperty("localId").GetString(); // Firebase UID
+            return JsonDocument.Parse(fbBody).RootElement.GetProperty("localId").GetString();
         }
         catch (Exception ex)
         {
