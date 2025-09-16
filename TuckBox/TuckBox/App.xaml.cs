@@ -7,16 +7,38 @@ namespace TuckBox
     {
         private readonly AppDb _db;
 
+        // DI constructor stays — good
         public App(AppDb db)
         {
             InitializeComponent();
             _db = db;
 
-            // Set a quick splash or shell immediately; init runs in background
-            MainPage = new AppShell();
-
-            // fire-and-forget app initialization
+            // Fire-and-forget DB init + seed (doesn't block UI)
             _ = InitializeAsync();
+        }
+
+        // ✅ MAUI 9+ startup pattern
+        protected override Window CreateWindow(IActivationState? activationState)
+        {
+            // Do NOT call base.CreateWindow — return your own Window
+            var window = new Window(new AppShell());
+
+            // Start at Splash once Shell is attached
+            window.Dispatcher.Dispatch(async () =>
+            {
+                try
+                {
+                    await Task.Yield(); // ensure Shell.Current is available
+                    if (Shell.Current is not null)
+                        await Shell.Current.GoToAsync("//Splash");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Startup nav error: {ex.Message}");
+                }
+            });
+
+            return window;
         }
 
         private async Task InitializeAsync()
@@ -28,7 +50,6 @@ namespace TuckBox
             }
             catch (Exception ex)
             {
-                // Optional: log or surface a friendly message
                 System.Diagnostics.Debug.WriteLine($"DB init error: {ex.Message}");
             }
         }
@@ -37,30 +58,32 @@ namespace TuckBox
         {
             var conn = _db.Conn;
 
-            // Seed Cities
+            // Cities
             var cityCount = await conn.Table<City>().CountAsync();
             if (cityCount == 0)
             {
                 await conn.InsertAllAsync(new[]
                 {
-                new City { City_ID = Guid.NewGuid().ToString(), City_Name = "Palmerston North" },
-                new City { City_ID = Guid.NewGuid().ToString(), City_Name = "Feilding" },
-                new City { City_ID = Guid.NewGuid().ToString(), City_Name = "Ashhurst" },
-                new City { City_ID = Guid.NewGuid().ToString(), City_Name = "Levin" },
-            });
+                    // 👇 Use property names that match your model class
+                    new City { City_ID = Guid.NewGuid().ToString(), City_Name = "Palmerston North" },
+                    new City { City_ID = Guid.NewGuid().ToString(), City_Name = "Feilding" },
+                    new City { City_ID = Guid.NewGuid().ToString(), City_Name = "Ashhurst" },
+                    new City { City_ID = Guid.NewGuid().ToString(), City_Name = "Levin" },
+                });
             }
 
-            // Seed TimeSlots
+            // TimeSlots
             var slotCount = await conn.Table<TimeSlot>().CountAsync();
             if (slotCount == 0)
             {
                 await conn.InsertAllAsync(new[]
                 {
-                new TimeSlot { TimeSlot_ID = Guid.NewGuid().ToString(), Time_Slot = "11:45–12:15" },
-                new TimeSlot { TimeSlot_ID = Guid.NewGuid().ToString(), Time_Slot = "12:15–12:45" },
-                new TimeSlot { TimeSlot_ID = Guid.NewGuid().ToString(), Time_Slot = "12:45–1:15"  },
-                new TimeSlot { TimeSlot_ID = Guid.NewGuid().ToString(), Time_Slot = "1:15–1:45"   },
-            });
+                    // 👇 Match your model’s property names (TimeSlot_ID vs Time_Slot_ID)
+                    new TimeSlot { TimeSlot_ID = Guid.NewGuid().ToString(), Time_Slot = "11:45–12:15" },
+                    new TimeSlot { TimeSlot_ID = Guid.NewGuid().ToString(), Time_Slot = "12:15–12:45" },
+                    new TimeSlot { TimeSlot_ID = Guid.NewGuid().ToString(), Time_Slot = "12:45–1:15"  },
+                    new TimeSlot { TimeSlot_ID = Guid.NewGuid().ToString(), Time_Slot = "1:15–1:45"   },
+                });
             }
         }
     }

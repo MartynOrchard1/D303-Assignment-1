@@ -1,14 +1,23 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Shell
     x:Class="TuckBox.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:TuckBox"
+    xmlns:views="clr-namespace:TuckBox.Views"
+    xmlns:pages="clr-namespace:TuckBox"
+    Shell.NavBarIsVisible="False"
     Title="TuckBox">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <!-- Splash -->
+    <ShellContent Route="Splash"
+                ContentTemplate="{DataTemplate views:Splash}" />
+
+    <!-- Login -->
+    <ShellContent Route="Login"
+                ContentTemplate="{DataTemplate views:Login}" />
+
+    <!-- Main (root namespace, not Views) -->
+    <ShellContent Route="Main"
+                ContentTemplate="{DataTemplate pages:MainPage}" />
 
 </Shell>
