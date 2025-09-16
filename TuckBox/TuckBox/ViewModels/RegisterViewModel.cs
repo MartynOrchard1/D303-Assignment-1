@@ -22,16 +22,20 @@ public partial class RegisterViewModel : ObservableObject
     {
         _auth = auth;
         _db = db;
+        System.Diagnostics.Debug.WriteLine("[DEBUG] RegisterViewModel initialized.");
     }
 
     [RelayCommand]
     private async Task RegisterAsync()
     {
+        System.Diagnostics.Debug.WriteLine($"[DEBUG] Register attempt email={Email}, name={FirstName} {LastName}");
+
         StatusMessage = "Registering...";
         var uid = await _auth.SignUpAsync(Email, Password);
 
         if (uid == null)
         {
+            System.Diagnostics.Debug.WriteLine("[DEBUG] Register failed (Firebase returned null).");
             StatusMessage = "Failed to register.";
             return;
         }
@@ -40,13 +44,14 @@ public partial class RegisterViewModel : ObservableObject
         {
             User_ID = uid,
             User_Email = Email,
-            Password = Password, // ⚠️ For assignment only; normally don’t store plaintext
+            Password = Password, // ⚠️ For assignment only
             First_Name = FirstName,
             Last_Name = LastName,
             Mobile = Mobile
         };
 
         await _db.Conn.InsertAsync(user);
+        System.Diagnostics.Debug.WriteLine($"[DEBUG] Registered user saved locally with UID={uid}");
 
         StatusMessage = "Registration successful!";
         await Shell.Current.GoToAsync("//Login");
@@ -55,6 +60,7 @@ public partial class RegisterViewModel : ObservableObject
     [RelayCommand]
     private async Task GoToLoginAsync()
     {
+        System.Diagnostics.Debug.WriteLine("[DEBUG] Navigating to Login page.");
         await Shell.Current.GoToAsync("//Login");
     }
 }

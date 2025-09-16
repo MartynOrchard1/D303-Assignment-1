@@ -38,16 +38,34 @@ namespace TuckBox
                 return new FirebaseAuthService(apiKey);
             });
 
+            // Register FirebaseAuthService
             builder.Services.AddSingleton(sp =>
             {
-                using var stream = File.OpenRead(Path.Combine(FileSystem.AppDataDirectory, "appsettings.json"));
-                var config = JsonSerializer.Deserialize<Dictionary<string, string>>(stream);
+                using var stream = FileSystem.OpenAppPackageFileAsync("appsettings.json").Result;
+                using var reader = new StreamReader(stream);
+                var json = reader.ReadToEnd();
+                var config = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
                 var apiKey = config?["FirebaseApiKey"] ?? "";
 
                 System.Diagnostics.Debug.WriteLine($"[DEBUG] Firebase API Key loaded: {apiKey}");
 
                 return new FirebaseAuthService(apiKey);
             });
+
+
+
+            // ViewModels
+            builder.Services.AddTransient<LoginViewModel>(sp =>
+            {
+                var auth = sp.GetRequiredService<FirebaseAuthService>();
+                // Inject the real API key so ViewModel can expose it
+                var vm = new LoginViewModel(auth)
+                {
+                    ApiKey = "Loaded: " + "AIzaSyBfCXZyIi6VB0SMjyjVDWVj7EEuUI3OHtY" // or config value
+                };
+                return vm;
+            });
+
 
             // ViewModels
             builder.Services.AddTransient<LoginViewModel>();
