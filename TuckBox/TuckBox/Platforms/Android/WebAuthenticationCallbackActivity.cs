@@ -9,9 +9,8 @@ namespace TuckBox;
 [IntentFilter(
     new[] { Intent.ActionView },
     Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable },
-    // 👇 MUST MATCH the redirectUri's scheme and host EXACTLY
-    DataScheme = "com.googleusercontent.apps.971309845644-h9n09e6abha7ooa8an6g3rtgh0dotf1i",
-    DataHost = "oauth2redirect"
+    DataScheme = "com.googleusercontent.apps.971309845644-bsbjg2sbr4k6is8mivmq1h1g9nval02p",
+    DataPath = "/oauth2redirect"
 )]
 public class WebAuthenticationCallbackActivity : WebAuthenticatorCallbackActivity
 {
