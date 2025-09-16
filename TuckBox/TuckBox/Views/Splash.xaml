@@ -15,11 +15,6 @@
              HeightRequest="160"
              Opacity="0"
              Scale="0.85"/>
-            <Label x:Name="Label"
-             Text="TuckBox"
-             FontSize="24"
-             Opacity="0"
-             HorizontalOptions="Center"/>
         </VerticalStackLayout>
     </Grid>
 </ContentPage>
