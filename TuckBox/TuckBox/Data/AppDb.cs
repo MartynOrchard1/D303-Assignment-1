@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using TuckBox.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,20 +12,17 @@ public class AppDb
 {
     private readonly SQLiteAsyncConnection _db;
 
-    public AppDb(string dbPath)
-    {
-        _db = new SQLiteAsyncConnection(dbPath);
-    }
+    public AppDb(string dbPath) => _db = new SQLiteAsyncConnection(dbPath);
+
 
     public async Task InitAsync()
     {
-        // Tables will be added later as models are created
-        await _db.CreateTableAsync<UserProfile>();
+        await _db.CreateTableAsync<User>();
         await _db.CreateTableAsync<DeliveryAddress>();
         await _db.CreateTableAsync<City>();
         await _db.CreateTableAsync<TimeSlot>();
         await _db.CreateTableAsync<Food>();
-        await _db.CreateTableAsync<FoodExtraDetails>();
+        await _db.CreateTableAsync<Food_Extra_Details>();
         await _db.CreateTableAsync<Order>();
     }
 
