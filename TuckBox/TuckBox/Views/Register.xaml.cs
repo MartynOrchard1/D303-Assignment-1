@@ -2,9 +2,9 @@ using TuckBox.ViewModels;
 
 namespace TuckBox.Views;
 
-public partial class Login : ContentPage
+public partial class Register : ContentPage
 {
-    public Login(LoginViewModel vm)
+    public Register(RegisterViewModel vm)
     {
         InitializeComponent();
         BindingContext = vm;
