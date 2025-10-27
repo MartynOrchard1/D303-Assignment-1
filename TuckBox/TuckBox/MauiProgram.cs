@@ -74,8 +74,6 @@ namespace TuckBox
                 return new FirebaseDbService(dbUrl);
             });
 
-
-
             // Register VM
             builder.Services.AddTransient<RegisterViewModel>();
 
