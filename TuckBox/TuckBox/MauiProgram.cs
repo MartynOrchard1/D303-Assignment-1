@@ -61,6 +61,20 @@ namespace TuckBox
                 return new LoginViewModel(auth, googleClientId, googleRedirectUri);
             });
 
+            builder.Services.AddSingleton(sp =>
+            {
+                using var stream = FileSystem.OpenAppPackageFileAsync("appsettings.json").Result;
+                using var reader = new StreamReader(stream);
+                var json = reader.ReadToEnd();
+                var cfg = JsonSerializer.Deserialize<Dictionary<string, string>>(json)!;
+
+                var dbUrl = cfg["FirebaseDbUrl"];
+                System.Diagnostics.Debug.WriteLine($"[DEBUG] Firebase DB URL loaded: {dbUrl}");
+
+                return new FirebaseDbService(dbUrl);
+            });
+
+
 
             // Register VM
             builder.Services.AddTransient<RegisterViewModel>();
