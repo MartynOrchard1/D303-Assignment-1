@@ -43,9 +43,19 @@ namespace TuckBox
             // ✅ Firebase Authentication Service (singleton)
             builder.Services.AddSingleton(new FirebaseAuthService(apiKey));
 
+            // after you've already created the singleton FirebaseAuthService(apiKey)
+            builder.Services.AddSingleton(sp =>
+            {
+                var cfg = LoadConfig(); // your helper that reads appsettings.json
+                var dbUrl = cfg["FirebaseDbUrl"];
+                var auth = sp.GetRequiredService<FirebaseAuthService>(); // SAME instance with token
+                return new FirebaseDbService(dbUrl, auth);
+            });
+
+
             // ✅ Firebase Realtime Database Service (public access for now)
             //   → Uses only DB URL; no auth token required
-            builder.Services.AddSingleton(new FirebaseDbService(dbUrl));
+            //builder.Services.AddSingleton(new FirebaseDbService(dbUrl));
 
             // ✅ ViewModels
             builder.Services.AddTransient<LoginViewModel>(sp =>

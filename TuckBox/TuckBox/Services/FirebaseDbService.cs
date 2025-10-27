@@ -1,5 +1,10 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
 using TuckBox.Models;
+using System.Threading.Tasks;
 
 namespace TuckBox.Services
 {
@@ -7,7 +12,7 @@ namespace TuckBox.Services
     {
         private readonly HttpClient _http = new HttpClient();
         private readonly string _dbUrl;
-        private readonly FirebaseAuthService _auth; // <- token source
+        private readonly FirebaseAuthService _auth; // Token source
 
         public FirebaseDbService(string dbUrl, FirebaseAuthService auth)
         {
@@ -54,5 +59,9 @@ namespace TuckBox.Services
             resp.EnsureSuccessStatusCode();
             return JsonSerializer.Deserialize<Dictionary<string, TimeSlot>>(body) ?? new();
         }
+
+
+
     }
 }
+

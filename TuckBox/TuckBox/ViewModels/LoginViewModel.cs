@@ -34,6 +34,16 @@ public partial class LoginViewModel : ObservableObject
         {
             System.Diagnostics.Debug.WriteLine($"[DEBUG] Login success, Firebase UID={uid}");
             StatusMessage = "Login successful!";
+
+            // ✅ confirm token is set
+            if (string.IsNullOrEmpty(_auth.CurrentIdToken))
+            {
+                System.Diagnostics.Debug.WriteLine("[DEBUG] Waiting for ID token...");
+                await Task.Delay(500); // short delay ensures async completion
+            }
+
+            System.Diagnostics.Debug.WriteLine($"[DEBUG] ID Token available: {!string.IsNullOrEmpty(_auth.CurrentIdToken)}");
+
             await Shell.Current.GoToAsync("//Main");
         }
         else
@@ -42,6 +52,7 @@ public partial class LoginViewModel : ObservableObject
             StatusMessage = "Invalid credentials.";
         }
     }
+
 
 
 
