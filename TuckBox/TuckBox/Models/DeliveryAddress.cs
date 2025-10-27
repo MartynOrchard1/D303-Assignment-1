@@ -8,7 +8,7 @@ using SQLite;
 
 namespace TuckBox.Models
 {
-    internal class DeliveryAddress
+    public class DeliveryAddress
     {
         [PrimaryKey, AutoIncrement]
         public int Address_ID { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TuckBox.Models
 {
-    internal class Order
+    public class Order
     {
         [PrimaryKey]
         public string Order_ID { get; set; } = Guid.NewGuid().ToString();
