@@ -12,6 +12,10 @@ public class FirebaseAuthService
     private readonly HttpClient _http;
     private readonly string _apiKey;
 
+    // ✅ ADDED: expose the current Firebase ID token + UID for REST calls (e.g., Realtime DB ?auth=ID_TOKEN)
+    public string? CurrentIdToken { get; private set; }   // Firebase ID token (JWT)
+    public string? CurrentUserId { get; private set; }   // Firebase UID (localId)
+
     public FirebaseAuthService(string apiKey)
     {
         _http = new HttpClient();
@@ -33,7 +37,12 @@ public class FirebaseAuthService
             if (!resp.IsSuccessStatusCode) return null;
 
             var doc = JsonDocument.Parse(body);
-            return doc.RootElement.GetProperty("localId").GetString();
+
+            // ✅ ADDED: capture ID token + UID
+            CurrentIdToken = doc.RootElement.GetProperty("idToken").GetString();
+            CurrentUserId = doc.RootElement.GetProperty("localId").GetString();
+
+            return CurrentUserId;
         }
         catch (Exception ex)
         {
@@ -57,7 +66,12 @@ public class FirebaseAuthService
             if (!resp.IsSuccessStatusCode) return null;
 
             var doc = JsonDocument.Parse(body);
-            return doc.RootElement.GetProperty("localId").GetString();
+
+            // ✅ ADDED: capture ID token + UID
+            CurrentIdToken = doc.RootElement.GetProperty("idToken").GetString();
+            CurrentUserId = doc.RootElement.GetProperty("localId").GetString();
+
+            return CurrentUserId;
         }
         catch (Exception ex)
         {
@@ -67,10 +81,10 @@ public class FirebaseAuthService
     }
 
     public async Task<string?> SignInWithGoogleAsync(
-    string googleClientId,
-    string authRedirectUriHttps,   // e.g. https://MartynOrchard1.github.io/
-    string appCallbackUriCustom    // e.g. com.google...:/oauth2redirect
-)
+        string googleClientId,
+        string authRedirectUriHttps,   // e.g. https://MartynOrchard1.github.io/
+        string appCallbackUriCustom    // e.g. com.google...:/oauth2redirect
+    )
     {
         try
         {
@@ -125,7 +139,14 @@ public class FirebaseAuthService
                 System.Diagnostics.Debug.WriteLine($"[DEBUG] Firebase (implicit) status={fbRespFallback.StatusCode} body={fbBodyFallback}");
 
                 if (!fbRespFallback.IsSuccessStatusCode) return null;
-                return JsonDocument.Parse(fbBodyFallback).RootElement.GetProperty("localId").GetString();
+
+                var fbDoc = JsonDocument.Parse(fbBodyFallback);
+
+                // ✅ ADDED: capture ID token + UID after signInWithIdp
+                CurrentUserId = fbDoc.RootElement.GetProperty("localId").GetString();
+                CurrentIdToken = fbDoc.RootElement.GetProperty("idToken").GetString();
+
+                return CurrentUserId;
             }
 
             if (string.IsNullOrEmpty(authCode))
@@ -175,7 +196,14 @@ public class FirebaseAuthService
             System.Diagnostics.Debug.WriteLine($"[DEBUG] Firebase signInWithIdp status={fbResp.StatusCode} body={fbBody}");
 
             if (!fbResp.IsSuccessStatusCode) return null;
-            return JsonDocument.Parse(fbBody).RootElement.GetProperty("localId").GetString();
+
+            var fbDoc2 = JsonDocument.Parse(fbBody);
+
+            // ✅ ADDED: capture ID token + UID after signInWithIdp
+            CurrentUserId = fbDoc2.RootElement.GetProperty("localId").GetString();
+            CurrentIdToken = fbDoc2.RootElement.GetProperty("idToken").GetString();
+
+            return CurrentUserId;
         }
         catch (Exception ex)
         {
@@ -184,6 +212,12 @@ public class FirebaseAuthService
         }
     }
 
+    // (Optional) ✅ ADDED: simple sign-out helper so you can clear tokens when logging out
+    public void SignOut()
+    {
+        CurrentIdToken = null;
+        CurrentUserId = null;
+    }
 
     // ---- Helpers for PKCE ----
     private static string MakeCodeVerifier()
