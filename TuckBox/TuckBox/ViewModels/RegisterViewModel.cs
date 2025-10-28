@@ -9,7 +9,8 @@ namespace TuckBox.ViewModels;
 public partial class RegisterViewModel : ObservableObject
 {
     private readonly FirebaseAuthService _auth;
-    private readonly AppDb _db;
+    private readonly FirebaseDbService _cloudDb;
+    private readonly AppDb _localDb;
 
     [ObservableProperty] private string firstName = "";
     [ObservableProperty] private string lastName = "";
@@ -18,49 +19,67 @@ public partial class RegisterViewModel : ObservableObject
     [ObservableProperty] private string mobile = "";
     [ObservableProperty] private string statusMessage = "";
 
-    public RegisterViewModel(FirebaseAuthService auth, AppDb db)
+    public RegisterViewModel(FirebaseAuthService auth, FirebaseDbService cloudDb, AppDb localDb)
     {
         _auth = auth;
-        _db = db;
-        System.Diagnostics.Debug.WriteLine("[DEBUG] RegisterViewModel initialized.");
+        _cloudDb = cloudDb;
+        _localDb = localDb;
     }
 
     [RelayCommand]
     private async Task RegisterAsync()
     {
-        System.Diagnostics.Debug.WriteLine($"[DEBUG] Register attempt email={Email}, name={FirstName} {LastName}");
+        // Validate
+        var errors = new List<string>();
+        if (string.IsNullOrWhiteSpace(FirstName)) errors.Add("First name is required.");
+        if (string.IsNullOrWhiteSpace(LastName)) errors.Add("Last name is required.");
+        if (string.IsNullOrWhiteSpace(Email) || !Email.Contains("@")) errors.Add("Valid email is required.");
+        if (string.IsNullOrWhiteSpace(Password) || Password.Length < 6) errors.Add("Password must be at least 6 characters.");
+        if (string.IsNullOrWhiteSpace(Mobile)) errors.Add("Mobile number is required.");
+        if (errors.Count > 0) { StatusMessage = string.Join("\n", errors); return; }
 
-        StatusMessage = "Registering...";
+        StatusMessage = "Creating account...";
         var uid = await _auth.SignUpAsync(Email, Password);
+        if (uid is null) { StatusMessage = "Registration failed."; return; }
 
-        if (uid == null)
-        {
-            System.Diagnostics.Debug.WriteLine("[DEBUG] Register failed (Firebase returned null).");
-            StatusMessage = "Failed to register.";
-            return;
-        }
-
-        var user = new User
+        // Build profile
+        var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var profile = new User
         {
             User_ID = uid,
-            User_Email = Email,
-            Password = Password, // ⚠️ For assignment only
-            First_Name = FirstName,
-            Last_Name = LastName,
-            Mobile = Mobile
+            User_Email = Email.Trim(),
+            Password = Password, // ⚠️ assignment only
+            First_Name = FirstName.Trim(),
+            Last_Name = LastName.Trim(),
+            Mobile = Mobile.Trim(),
+            Created_Utc = now,
+            Updated_Utc = now
         };
 
-        await _db.Conn.InsertAsync(user);
-        System.Diagnostics.Debug.WriteLine($"[DEBUG] Registered user saved locally with UID={uid}");
+        // Ensure we have a token
+        if (string.IsNullOrEmpty(_auth.CurrentIdToken))
+        {
+            // small wait to allow token propagation
+            await Task.Delay(300);
+            if (string.IsNullOrEmpty(_auth.CurrentIdToken))
+            {
+                StatusMessage = "Could not get auth token.";
+                return;
+            }
+        }
+
+        // Cloud write
+        StatusMessage = "Saving profile...";
+        var ok = await _cloudDb.UpsertUserProfileAsync(profile, _auth.CurrentIdToken!);
+        if (!ok) { StatusMessage = "Failed to save profile to cloud."; return; }
+
+        // Local mirror
+        await _localDb.Conn.InsertOrReplaceAsync(profile);
 
         StatusMessage = "Registration successful!";
-        await Shell.Current.GoToAsync("//Login");
+        await Shell.Current.GoToAsync("Login"); // relative (route-only page)
     }
 
     [RelayCommand]
-    private async Task GoToLoginAsync()
-    {
-        System.Diagnostics.Debug.WriteLine("[DEBUG] Navigating to Login page.");
-        await Shell.Current.GoToAsync("//Login");
-    }
+    private async Task GoToLoginAsync() => await Shell.Current.GoToAsync("Login");
 }
