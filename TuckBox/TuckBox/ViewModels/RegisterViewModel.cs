@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using TuckBox.Services;
 using TuckBox.Models;
 using TuckBox.Data;
+using TuckBox.Helpers;
 
 namespace TuckBox.ViewModels;
 
@@ -48,7 +49,7 @@ public partial class RegisterViewModel : ObservableObject
         {
             User_ID = uid,
             User_Email = Email.Trim(),
-            Password = Password, // ⚠️ assignment only
+            Password = PasswordHelper.HashPassword(password), // ⚠️ assignment only
             First_Name = FirstName.Trim(),
             Last_Name = LastName.Trim(),
             Mobile = Mobile.Trim(),

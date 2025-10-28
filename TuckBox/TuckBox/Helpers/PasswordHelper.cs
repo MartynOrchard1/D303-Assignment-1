@@ -20,11 +20,11 @@ namespace TuckBox.Helpers
             var hash = sha256.ComputeHash(bytes);
             return Convert.ToBase64String(hash);
         }
-
-        public static bool VerifyPassword(string password, string hashedPassword)
+        
+        public static bool VerifyPassword(string enteredPassword, string storedHash)
         {
-            var hashOfInput = HashPassword(password);
-            return hashofEntered == storedHash;
+            var hashOfEntered = HashPassword(enteredPassword);
+            return hashOfEntered == storedHash;
         }
     }
 }
