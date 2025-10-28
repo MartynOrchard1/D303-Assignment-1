@@ -20,6 +20,30 @@ namespace TuckBox.Services
             _auth = auth;
         }
 
+        // Write or update /Users/{uid}
+        public async Task<bool> UpsertUserProfileAsync(User profile, string idToken)
+        {
+            var url = $"{_dbUrl}/Users/{profile.User_ID}.json?auth={idToken}";
+            var json = JsonSerializer.Serialize(profile);
+            var resp = await _http.PutAsync(url, new StringContent(json, System.Text.Encoding.UTF8, "application/json"));
+            var body = await resp.Content.ReadAsStringAsync();
+            System.Diagnostics.Debug.WriteLine($"[DEBUG] UpsertUserProfile status={resp.StatusCode} body={body}");
+            return resp.IsSuccessStatusCode;
+        }
+
+        // Read /Users/{uid}
+        public async Task<User?> GetUserProfileAsync(string uid, string idToken)
+        {
+            var url = $"{_dbUrl}/Users/{uid}.json?auth={idToken}";
+            var resp = await _http.GetAsync(url);
+            var body = await resp.Content.ReadAsStringAsync();
+            System.Diagnostics.Debug.WriteLine($"[DEBUG] GetUserProfile status={resp.StatusCode} body={body}");
+            if (!resp.IsSuccessStatusCode || string.IsNullOrWhiteSpace(body) || body == "null")
+                return null;
+
+            return JsonSerializer.Deserialize<User>(body);
+        }
+
         private string Url(string path)
         {
             var token = _auth.CurrentIdToken;
