@@ -10,18 +10,18 @@
 
     <!-- Splash -->
     <ShellContent Route="Splash"
-                ContentTemplate="{DataTemplate views:Splash}" />
+                ContentTemplate="{DataTemplate views:Splash}" /> 
 
     <!-- Login -->
-    <ShellContent Route="Login"
-                ContentTemplate="{DataTemplate views:Login}" />
+    <!-- <ShellContent Route="Login"
+                ContentTemplate="{DataTemplate views:Login}" /> -->
 
     <!-- Register -->
-    <ShellContent Route="Register"
-                ContentTemplate="{DataTemplate views:Register}" />
+    <!-- <ShellContent Route="Register"
+                ContentTemplate="{DataTemplate views:Register}" /> -->
 
     <!-- Main (root namespace, not Views) -->
-    <ShellContent Route="Main"
-                ContentTemplate="{DataTemplate pages:MainPage}" />
+    <!-- <ShellContent Route="Main"
+                ContentTemplate="{DataTemplate pages:MainPage}" /> -->
 
 </Shell>

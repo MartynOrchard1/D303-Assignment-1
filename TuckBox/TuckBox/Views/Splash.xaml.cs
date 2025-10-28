@@ -24,7 +24,7 @@ public partial class Splash : ContentPage
         );
 
         // Navigate to Login
-        await Shell.Current.GoToAsync("//Login");
+        await Shell.Current.GoToAsync("Login");
     }
 
 

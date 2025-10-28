@@ -69,8 +69,12 @@ namespace TuckBox
             // ✅ Pages
             builder.Services.AddTransient<Login>();
             builder.Services.AddTransient<Register>();
+            builder.Services.AddTransient<TuckBox.MainPage>(); 
+
 
             return builder.Build();
+
+
         }
 
         // ✅ Helper to load JSON config only once

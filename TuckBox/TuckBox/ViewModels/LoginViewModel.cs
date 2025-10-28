@@ -44,7 +44,7 @@ public partial class LoginViewModel : ObservableObject
 
             System.Diagnostics.Debug.WriteLine($"[DEBUG] ID Token available: {!string.IsNullOrEmpty(_auth.CurrentIdToken)}");
 
-            await Shell.Current.GoToAsync("//Main");
+            await Shell.Current.GoToAsync("Main");
         }
         else
         {
@@ -60,7 +60,15 @@ public partial class LoginViewModel : ObservableObject
     private async Task GoToRegisterAsync()
     {
         System.Diagnostics.Debug.WriteLine("[DEBUG] Navigating to Register page.");
-        await Shell.Current.GoToAsync("//Register");
+        try
+        {
+            await Shell.Current.GoToAsync("Register");
+
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[NAV ERROR] {ex.GetType().Name}: {ex.Message}\n{ex}");
+        }
     }
 
     [RelayCommand]
@@ -74,7 +82,7 @@ public partial class LoginViewModel : ObservableObject
         if (uid != null)
         {
             System.Diagnostics.Debug.WriteLine($"[DEBUG] Google login success. Firebase UID={uid}");
-            await Shell.Current.GoToAsync("//Main");
+            await Shell.Current.GoToAsync("Main");
         }
         else
         {
