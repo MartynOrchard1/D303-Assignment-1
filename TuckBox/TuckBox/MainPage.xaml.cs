@@ -1,29 +1,44 @@
 ﻿namespace TuckBox;
+using TuckBox.Models;
 using TuckBox.Services;
+using System.Collections.ObjectModel;
 
 public partial class MainPage : ContentPage
 {
-
-    private readonly FirebaseDbService _dbService;
+    private readonly FirebaseDbService _db;
+    private readonly ObservableCollection<City> _cities = new();
 
     public MainPage(FirebaseDbService dbService)
     {
         InitializeComponent();
-        _dbService = dbService;
-
-        LoadCities();
+        _db = dbService;
+        CitiesList.ItemsSource = _cities;
     }
 
-    private async void LoadCities()
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await LoadCities();
+    }
+
+    private async Task LoadCities()
     {
         try
         {
-            var cities = await _dbService.GetCitiesAsync();
+            StatusLabel.Text = "Loading cities...";
+            var cities = await _db.GetCitiesAsync();
+
+            _cities.Clear();
             foreach (var city in cities.Values)
-                System.Diagnostics.Debug.WriteLine($"City: {city.City_Name}");
+                _cities.Add(city);
+
+            StatusLabel.Text = _cities.Count > 0
+                ? $"Loaded {_cities.Count} cities."
+                : "No cities found.";
         }
         catch (Exception ex)
         {
+            StatusLabel.Text = "Error loading cities.";
             System.Diagnostics.Debug.WriteLine($"[ERROR] Firebase fetch failed: {ex.Message}");
         }
     }

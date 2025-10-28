@@ -24,6 +24,18 @@ public class AppDb
         await _db.CreateTableAsync<Food>();
         await _db.CreateTableAsync<Food_Extra_Details>();
         await _db.CreateTableAsync<Order>();
+        await _db.CreateTableAsync<User>();
+    }
+
+    // Insert helpers
+    public Task<int> UpsertUserProfileAsync(User user)
+    {
+        return _db.InsertOrReplaceAsync(user);
+    }
+
+    public Task<User?> GetUserProfileAsync(string uid)
+    {
+        return _db.FindAsync<User>(uid);
     }
 
     public SQLiteAsyncConnection Conn => _db;

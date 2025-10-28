@@ -3,8 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TuckBox.MainPage">
 
-    <ScrollView>
-        <Label>Hello World</Label>
-    </ScrollView>
+    <VerticalStackLayout Padding="20" Spacing="10">
+
+        <!-- status text -->
+        <Label
+            x:Name="StatusLabel"
+            Text="Loading cities..."
+            FontAttributes="Bold"
+            HorizontalOptions="Center" />
+
+        <!-- city list -->
+        <CollectionView x:Name="CitiesList">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="5" BorderColor="#ccc" CornerRadius="10">
+                        <Label Text="{Binding City_Name}" FontSize="18" />
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </VerticalStackLayout>
 
 </ContentPage>
