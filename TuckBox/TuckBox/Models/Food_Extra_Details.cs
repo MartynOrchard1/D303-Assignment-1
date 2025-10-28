@@ -7,7 +7,7 @@ using SQLite;
 
 namespace TuckBox.Models
 {
-    internal class Food_Extra_Details
+    public class Food_Extra_Details
     {
         [PrimaryKey]
         public string Food_Details_ID { get; set; } = Guid.NewGuid().ToString();
