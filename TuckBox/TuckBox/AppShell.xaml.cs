@@ -10,10 +10,10 @@
             Routing.RegisterRoute("Main", typeof(TuckBox.MainPage));
             Routing.RegisterRoute("Register", typeof(TuckBox.Views.Register));
             Routing.RegisterRoute("Login", typeof(TuckBox.Views.Login));
-            Routing.RegisterRoute("Login", typeof(TuckBox.Views.CurrentOrder));
-            Routing.RegisterRoute("Login", typeof(TuckBox.Views.PlaceOrder));
-            Routing.RegisterRoute("Login", typeof(TuckBox.Views.OrderHistory));
-            Routing.RegisterRoute("Login", typeof(TuckBox.Views.UpdateUser));
+            Routing.RegisterRoute("CurrentOrder", typeof(TuckBox.Views.CurrentOrder));
+            Routing.RegisterRoute("PlaceOrder", typeof(TuckBox.Views.PlaceOrder));
+            Routing.RegisterRoute("OrderHistory", typeof(TuckBox.Views.OrderHistory));
+            Routing.RegisterRoute("UpdateUser", typeof(TuckBox.Views.UpdateUser));
         }
     }
 }
