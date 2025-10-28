@@ -20,5 +20,8 @@ namespace TuckBox.Models
         public string First_Name { get; set; } = string.Empty;
         public string Last_Name { get; set; } = string.Empty;
         public string Mobile { get; set; } = string.Empty;
+        public long Created_Utc { get; set; }
+        public long Updated_Utc { get; set; }
+
     }
 }

@@ -10,9 +10,15 @@ namespace TuckBox.Services
 {
     public class FirebaseDbService
     {
-        private readonly HttpClient _http = new HttpClient();
+        // 🔹 keep them private for internal use
+        private readonly HttpClient _http;
         private readonly string _dbUrl;
-        private readonly FirebaseAuthService _auth; // Token source
+        private readonly FirebaseAuthService _auth; // Token source (if used for auth tokens)
+
+        // 🔹 expose read-only properties (safe to access externally)
+        public HttpClient Http => _http;
+        public string DbUrl => _dbUrl;
+
 
         public FirebaseDbService(string dbUrl, FirebaseAuthService auth)
         {
