@@ -69,8 +69,11 @@ namespace TuckBox
             // ✅ Pages
             builder.Services.AddTransient<Login>();
             builder.Services.AddTransient<Register>();
-            builder.Services.AddTransient<TuckBox.MainPage>(); 
-
+            builder.Services.AddTransient<TuckBox.MainPage>();
+            builder.Services.AddTransient<TuckBox.Views.PlaceOrder>();
+            builder.Services.AddTransient<TuckBox.Views.UpdateUser>();
+            builder.Services.AddTransient<TuckBox.Views.OrderHistory>();
+            builder.Services.AddTransient<TuckBox.Views.CurrentOrder>();
 
             return builder.Build();
         }

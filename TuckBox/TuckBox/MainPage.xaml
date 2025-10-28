@@ -1,28 +1,35 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TuckBox.MainPage">
+﻿<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="TuckBox.MainPage"
+    Title="TuckBox">
 
-    <VerticalStackLayout Padding="20" Spacing="10">
+    <!-- overflow menu -->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Home"        Order="Primary" Command="{Binding GoHomeCommand}" />
+        <ToolbarItem Text="Place Order" Order="Primary" Command="{Binding GoPlaceOrderCommand}" />
+        <ToolbarItem Text="Update User" Order="Primary" Command="{Binding GoUpdateUserCommand}" />
+        <ToolbarItem Text="Current Order" Order="Primary" Command="{Binding GoCurrentOrderCommand}" />
+        <ToolbarItem Text="Order History" Order="Primary" Command="{Binding GoOrderHistoryCommand}" />
+        <ToolbarItem Text="Sign Out"    Order="Primary" Command="{Binding SignOutCommand}" />
+    </ContentPage.ToolbarItems>
 
-        <!-- status text -->
-        <Label
-            x:Name="StatusLabel"
-            Text="Loading cities..."
-            FontAttributes="Bold"
-            HorizontalOptions="Center" />
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="12">
 
-        <!-- city list -->
-        <CollectionView x:Name="CitiesList">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Padding="10" Margin="5" BorderColor="#ccc" CornerRadius="10">
-                        <Label Text="{Binding City_Name}" FontSize="18" />
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+            <!-- welcome + 3 buttons -->
+            <Label x:Name="WelcomeLabel" Text="WELCOME" FontAttributes="Bold" FontSize="22" />
 
-    </VerticalStackLayout>
+            <Button Text="PLACE ORDER"    Command="{Binding GoPlaceOrderCommand}" />
+            <Button Text="UPDATE USER INFO" Command="{Binding GoUpdateUserCommand}" />
+            <Button Text="ORDER HISTORY"  Command="{Binding GoOrderHistoryCommand}" />
 
+            <Label Text="CURRENT ORDER" FontAttributes="Bold" FontSize="18" Margin="0,16,0,4"/>
+
+            <!-- your existing StatusLabel/CitiesList/FoodsList sit below this -->
+            <Label x:Name="StatusLabel" Text="Loading..." />
+            <CollectionView x:Name="CitiesList" />
+            <CollectionView x:Name="FoodsList" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

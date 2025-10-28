@@ -212,12 +212,6 @@ public class FirebaseAuthService
         }
     }
 
-    // (Optional) ✅ ADDED: simple sign-out helper so you can clear tokens when logging out
-    public void SignOut()
-    {
-        CurrentIdToken = null;
-        CurrentUserId = null;
-    }
 
     // ---- Helpers for PKCE ----
     private static string MakeCodeVerifier()
@@ -240,5 +234,18 @@ public class FirebaseAuthService
             .TrimEnd('=')
             .Replace('+', '-')
             .Replace('/', '_');
+    }
+    public void SignOut()
+    {
+        CurrentIdToken = null;
+        CurrentUserId = null;
+
+        try
+        {
+            CurrentIdToken = null; // if you store it
+            SecureStorage.Remove("id_token");
+            SecureStorage.Remove("refresh_token");
+        }
+        catch { /* ignore */ }
     }
 }
