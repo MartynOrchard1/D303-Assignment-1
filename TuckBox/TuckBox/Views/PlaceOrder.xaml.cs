@@ -42,15 +42,23 @@ public partial class PlaceOrder : ContentPage
             // Load cities & slots
             var cities = await _db.GetCitiesAsync();
             CityPicker.ItemsSource = cities.Values.ToList();
+            // NEW: show city name
+            CityPicker.ItemDisplayBinding = new Binding(nameof(City.City_Name));
+
 
             var slots = await _db.GetTimeSlotsAsync();
             SlotPicker.ItemsSource = slots.Values.ToList();
+           
+            // NEW: show time slot text
+            SlotPicker.ItemDisplayBinding = new Binding(nameof(TimeSlot.Time_Slot));
 
-            // Load addresses for current user (if available)
+            // Load addresses for current user
             if (!string.IsNullOrEmpty(_auth.CurrentUserId))
             {
                 var addrs = await _db.GetUserAddressesAsync(_auth.CurrentUserId);
                 AddressPicker.ItemsSource = addrs.Values.ToList();
+                // NEW: show address line
+                AddressPicker.ItemDisplayBinding = new Binding(nameof(DeliveryAddress.Address));
             }
 
             StatusLabel.Text = $"Loaded {_foods.Count} menu items.";
@@ -61,6 +69,47 @@ public partial class PlaceOrder : ContentPage
             System.Diagnostics.Debug.WriteLine($"[ERROR] LoadDataAsync: {ex.Message}");
         }
     }
+
+    private async void OnAddAddressClicked(object sender, EventArgs e)
+    {
+        if (string.IsNullOrEmpty(_auth.CurrentUserId))
+        {
+            await DisplayAlert("Not Signed In", "Please sign in first.", "OK");
+            return;
+        }
+
+        // ask for a single-line address (simple for the assignment)
+        var text = await DisplayPromptAsync(
+            "New Address",
+            "Enter your delivery address:",
+            maxLength: 200,
+            keyboard: Keyboard.Text);
+
+        if (string.IsNullOrWhiteSpace(text))
+            return;
+
+        var addr = new DeliveryAddress
+        {
+            Address_ID = Guid.NewGuid().ToString(),
+            Address = text.Trim(),
+            UsersUser_ID = _auth.CurrentUserId!
+        };
+
+        var ok = await _db.UpsertUserAddressAsync(_auth.CurrentUserId!, addr);
+        if (!ok)
+        {
+            await DisplayAlert("Error", "Could not save address. Try again.", "OK");
+            return;
+        }
+
+        // refresh list and preselect the new one
+        var addrs = await _db.GetUserAddressesAsync(_auth.CurrentUserId!);
+        var list = addrs.Values.ToList();
+        AddressPicker.ItemsSource = list;
+        AddressPicker.ItemDisplayBinding = new Binding(nameof(DeliveryAddress.Address));
+        AddressPicker.SelectedItem = list.FirstOrDefault(a => a.Address_ID == addr.Address_ID);
+    }
+
 
     // Radio selection handler for options
     private void OnOptionChecked(object sender, CheckedChangedEventArgs e)
