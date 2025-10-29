@@ -11,7 +11,7 @@ namespace TuckBox.Models
     public class DeliveryAddress
     {
         [PrimaryKey, AutoIncrement]
-        public int Address_ID { get; set; }
+        public string Address_ID { get; set; }
         public string Address { get; set; } = string.Empty;
 
         // FK -> Users.User_ID

@@ -1,82 +1,68 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TuckBox.Views.PlaceOrder"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             Title="Place Order">
+<ContentPage
+    x:Class="TuckBox.Views.PlaceOrder"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:TuckBox.Models"
+    Title="Place Order">
 
     <ScrollView>
-        <VerticalStackLayout Padding="16" Spacing="12">
+        <VerticalStackLayout Padding="20" Spacing="16">
 
-            <Label Text="PLACE YOUR ORDER" FontAttributes="Bold" FontSize="22" />
+            <Label x:Name="StatusLabel" Text="Loading..." FontAttributes="Bold" />
 
-            <!-- City -->
-            <Label Text="Select your city" FontAttributes="Bold" />
-            <Picker x:Name="CityPicker"
-                    ItemDisplayBinding="{Binding City_Name}"
-                    Title="Choose city" />
+            <Picker x:Name="CityPicker" Title="Select City" />
+            <Picker x:Name="SlotPicker" Title="Select Delivery Time Slot" />
+            <Picker x:Name="AddressPicker" Title="Select Delivery Address" />
 
-            <!-- Time Slot -->
-            <Label Text="Select delivery time slot" FontAttributes="Bold" />
-            <Picker x:Name="SlotPicker"
-                    ItemDisplayBinding="{Binding Time_Slot}"
-                    Title="Choose time slot" />
-
-            <!-- Address -->
-            <Label Text="Select delivery address" FontAttributes="Bold" />
-            <HorizontalStackLayout Spacing="8">
-                <Picker x:Name="AddressPicker"
-                        ItemDisplayBinding="{Binding Address}"
-                        HorizontalOptions="FillAndExpand"
-                        Title="Choose address" />
-                <Button Text="ADD" Clicked="OnAddAddressClicked" />
-            </HorizontalStackLayout>
-
-            <BoxView HeightRequest="1" BackgroundColor="#DDD" />
-
-            <Label Text="Menu" FontAttributes="Bold" FontSize="20" />
-
-            <!-- Foods with quantity + option choice -->
             <CollectionView x:Name="FoodsList" ItemsLayout="VerticalList">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame BorderColor="#ccc" CornerRadius="12" Padding="12" Margin="0,6">
-                            <VerticalStackLayout Spacing="8">
-
+                    <!-- x:DataType is optional; keep for compile-time checks -->
+                    <DataTemplate x:DataType="models:Food">
+                        <Frame Padding="12" Margin="0,6" BorderColor="#cccccc" CornerRadius="10">
+                            <VerticalStackLayout x:Name="RowRoot" Spacing="10">
                                 <Label Text="{Binding Food_Name}" FontAttributes="Bold" FontSize="18"/>
-                                <Label Text="{Binding Description}" FontSize="14" TextColor="#666"/>
+                                <Label Text="{Binding Description}" FontSize="14" TextColor="Gray"/>
 
-                                <!-- Option group -->
-                                <VerticalStackLayout>
+                                <!-- Options using native RadioButtons via BindableLayout -->
+                                <VerticalStackLayout Spacing="6">
                                     <Label Text="{Binding Option_Key}" FontAttributes="Bold"/>
-                                    <HorizontalStackLayout x:Name="OptionsHost" Spacing="12"/>
+                                    <HorizontalStackLayout
+                                        x:Name="OptionsHost"
+                                        Spacing="12"
+                                        BindableLayout.ItemsSource="{Binding Option_Values}">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <RadioButton
+                                                    Content="{Binding .}"
+                                                    Value="{Binding .}"
+                                                    GroupName="{Binding Source={x:Reference RowRoot}, Path=BindingContext.Food_ID}"
+                                                    CheckedChanged="OnOptionChecked" />
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </HorizontalStackLayout>
                                 </VerticalStackLayout>
 
-                                <!-- qty row -->
+                                <!-- Quantity row -->
                                 <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
-                                    <Button Text="-" WidthRequest="42" Clicked="OnMinusClicked"/>
-                                    <Label Text="0" x:Name="QtyLabel" FontAttributes="Bold" FontSize="18"
-                                    WidthRequest="32" HorizontalTextAlignment="Center"/>
-                                    <Button Text="+" WidthRequest="42" Clicked="OnPlusClicked"/>
-                                    <Label Text="{Binding Price, StringFormat='${0:F2}'}" FontAttributes="Bold" />
+                                    <Button Text="-" WidthRequest="44" Clicked="OnMinusClicked"/>
+                                    <Label x:Name="QtyLabel"
+                                           Text="0"
+                                           FontAttributes="Bold"
+                                           FontSize="18"
+                                           WidthRequest="32"
+                                           HorizontalTextAlignment="Center"/>
+                                    <Button Text="+" WidthRequest="44" Clicked="OnPlusClicked"/>
+                                    <Label Text="{Binding Price, StringFormat='${0:F2}'}"
+                                           FontAttributes="Bold" />
                                 </HorizontalStackLayout>
-
                             </VerticalStackLayout>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-
-            <BoxView HeightRequest="1" BackgroundColor="#DDD" />
-
-            <HorizontalStackLayout Spacing="12">
-                <Button Text="PLACE ORDER" Clicked="OnPlaceOrderClicked" />
-                <Button Text="CANCEL"      Clicked="OnCancelClicked" />
-            </HorizontalStackLayout>
-
-            <Label x:Name="StatusLabel" TextColor="Red"/>
+            <Button Text="Place Order" Clicked="OnPlaceOrderClicked" />
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>
