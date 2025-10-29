@@ -12,21 +12,29 @@ namespace TuckBox.Models
         [PrimaryKey]
         public string Order_ID { get; set; } = Guid.NewGuid().ToString();
 
+        // Core order info
         public DateTime Order_Date { get; set; } = DateTime.UtcNow;
         public int Quantity { get; set; } = 1;
 
-        // FK's - Just id's
+        // Foreign keys
         [Indexed]
-        public string Food_Extra_DetailsFood_Details_ID { get; set; } = string.Empty; // -> Food_Extra_Details
+        public string Food_ID { get; set; } = string.Empty;  // -> Foods.Food_ID
 
         [Indexed]
-        public string CityCity_ID { get; set; } = string.Empty; // -> City
+        public string City_ID { get; set; } = string.Empty;  // -> Cities.City_ID
 
         [Indexed]
-        public string TimeSlotsTime_Slot_ID { get; set; } = string.Empty; // -> TimeSlot
+        public string TimeSlot_ID { get; set; } = string.Empty;  // -> TimeSlots.TimeSlot_ID
 
         [Indexed]
-        public string UserUser_ID { get; set; } = string.Empty; // -> User
+        public string User_ID { get; set; } = string.Empty;  // -> Users.User_ID (Firebase UID)
 
+        // Extra details or customisation (like spice level, dressing, etc.)
+        public string Option_Key { get; set; } = string.Empty;
+        public string Option_Value { get; set; } = string.Empty;
+
+        // Price snapshot at order time
+        public double Total_Price { get; set; } = 0.0;
     }
 }
+
