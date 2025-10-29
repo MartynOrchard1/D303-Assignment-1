@@ -82,5 +82,23 @@ namespace TuckBox.Services
 
             return JsonSerializer.Deserialize<Models.User>(body);
         }
+        public async Task<Dictionary<string, TimeSlot>> GetTimeSlotsAsync()
+        {
+            try
+            {
+                var resp = await _http.GetAsync(BuildUrl("TimeSlots"));
+                var body = await resp.Content.ReadAsStringAsync();
+                System.Diagnostics.Debug.WriteLine($"[DEBUG] TimeSlots status={resp.StatusCode} body={body}");
+                resp.EnsureSuccessStatusCode();
+
+                return JsonSerializer.Deserialize<Dictionary<string, TimeSlot>>(body) ?? new();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[ERROR] GetTimeSlotsAsync failed: {ex.Message}");
+                return new();
+            }
+        }
+
     }
 }

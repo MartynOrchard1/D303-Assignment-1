@@ -16,6 +16,9 @@ public class FirebaseAuthService
     public string? CurrentIdToken { get; private set; }   // Firebase ID token (JWT)
     public string? CurrentUserId { get; private set; }   // Firebase UID (localId)
 
+    public string? CurrentUid => CurrentUserId;
+
+
     public FirebaseAuthService(string apiKey)
     {
         _http = new HttpClient();

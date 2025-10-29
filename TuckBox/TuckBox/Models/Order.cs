@@ -28,6 +28,10 @@ namespace TuckBox.Models
 
         [Indexed]
         public string User_ID { get; set; } = string.Empty;  // -> Users.User_ID (Firebase UID)
+                                                             // in Models/Order.cs
+        [Indexed]
+        public string Address_ID { get; set; } = string.Empty; // -> DeliveryAddresses.Address_ID
+
 
         // Extra details or customisation (like spice level, dressing, etc.)
         public string Option_Key { get; set; } = string.Empty;
