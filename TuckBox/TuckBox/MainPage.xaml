@@ -3,16 +3,12 @@
     x:Class="TuckBox.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="TuckBox">
+    Title="TuckBox"
+    Shell.NavBarIsVisible="True">
 
     <!-- 3-dot overflow menu -->
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Home"          Order="Primary" Command="{Binding GoHomeCommand}" />
-        <ToolbarItem Text="Place Order"   Order="Primary" Command="{Binding GoPlaceOrderCommand}" />
-        <ToolbarItem Text="Update User"   Order="Primary" Command="{Binding GoUpdateUserCommand}" />
-        <ToolbarItem Text="Current Order" Order="Primary" Command="{Binding GoCurrentOrderCommand}" />
-        <ToolbarItem Text="Order History" Order="Primary" Command="{Binding GoOrderHistoryCommand}" />
-        <ToolbarItem Text="Sign Out"      Order="Primary" Command="{Binding SignOutCommand}" />
+        <ToolbarItem x:Name="MoreItem" Text="⋮" Order="Primary" Priority="0" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -37,4 +33,3 @@
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
-w

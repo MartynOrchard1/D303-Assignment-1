@@ -4,6 +4,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using TuckBox.Models;
 using TuckBox.Services;
+using System.Windows.Input;
 
 public partial class MainPage : ContentPage
 {
@@ -27,6 +28,37 @@ public partial class MainPage : ContentPage
 
         BindingContext = this;        // <-- needed for ToolbarItem/Button bindings
         CitiesList.ItemsSource = _cities;
+
+        MoreItem.Clicked += OnMoreClicked;
+
+    }
+
+    private async void OnMoreClicked(object? sender, EventArgs e)
+    {
+        var choice = await DisplayActionSheet("Menu", "Cancel", null,
+            "Home", "Place Order", "Update User", "Current Order", "Order History", "Sign Out");
+
+        switch (choice)
+        {
+            case "Home":
+                await Shell.Current.GoToAsync("Main");
+                break;
+            case "Place Order":
+                await Shell.Current.GoToAsync("PlaceOrder");
+                break;
+            case "Update User":
+                await Shell.Current.GoToAsync("UpdateUser");
+                break;
+            case "Current Order":
+                await Shell.Current.GoToAsync("CurrentOrder");
+                break;
+            case "Order History":
+                await Shell.Current.GoToAsync("OrderHistory");
+                break;
+            case "Sign Out":
+                await SignOutAsync();
+                break;
+        }
     }
 
     protected override async void OnAppearing()
