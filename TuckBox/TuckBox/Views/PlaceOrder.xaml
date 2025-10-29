@@ -12,8 +12,13 @@
             <Label x:Name="StatusLabel" Text="Loading..." FontAttributes="Bold" />
 
             <Picker x:Name="CityPicker" Title="Select City" />
+
             <Picker x:Name="SlotPicker" Title="Select Delivery Time Slot" />
-            <Picker x:Name="AddressPicker" Title="Select Delivery Address" />
+
+            <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                <Picker x:Name="AddressPicker" Title="Select Delivery Address" HorizontalOptions="FillAndExpand" />
+                <Button Text="ADD" Clicked="OnAddAddressClicked" />
+            </HorizontalStackLayout>
 
             <CollectionView x:Name="FoodsList" ItemsLayout="VerticalList">
                 <CollectionView.ItemTemplate>
