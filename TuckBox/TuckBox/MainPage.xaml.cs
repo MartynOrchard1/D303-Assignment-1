@@ -115,7 +115,7 @@ public partial class MainPage : ContentPage
                 .First();
 
             var sb = new System.Text.StringBuilder();
-            sb.AppendLine($"Order: {latest.Order_ID}");
+            //sb.AppendLine($"Order: {latest.Order_ID}");
             sb.AppendLine($"Date: {latest.Order_Date}");
             if (!string.IsNullOrEmpty(latest.City_Name))
                 sb.AppendLine($"City: {latest.City_Name}");
@@ -123,13 +123,15 @@ public partial class MainPage : ContentPage
                 sb.AppendLine($"Time: {latest.Time_Slot}");
             sb.AppendLine($"Total: {latest.Total_Price:C}");
 
-            // show first item if you want
+            // Show all ordered items
             if (latest.Items != null && latest.Items.Count > 0)
             {
-                var first = latest.Items.Values.First();
-                sb.AppendLine($"1st item: {first.Food_Name} x{first.Quantity}");
-            }
-
+                sb.AppendLine("\nItems Ordered:");
+                foreach (var item in latest.Items.Values)
+                {
+                    sb.AppendLine($"• {item.Food_Name} ({item.Option_Value}) x{item.Quantity} — {item.Line_Total:C}");
+                }
+            
             CurrentOrderLabel.Text = sb.ToString();
         }
         catch (Exception ex)
