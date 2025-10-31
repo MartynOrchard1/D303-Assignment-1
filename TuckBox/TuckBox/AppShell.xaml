@@ -10,16 +10,27 @@
 
     <!-- Splash -->
     <ShellContent Route="Splash"
-                ContentTemplate="{DataTemplate views:Splash}" />
+                ContentTemplate="{DataTemplate views:Splash}" /> 
+
+    <!-- Login -->
+    <!-- <ShellContent Route="Login"
+                ContentTemplate="{DataTemplate views:Login}" /> -->
+
+    <!-- Register -->
+    <!-- <ShellContent Route="Register"
+                ContentTemplate="{DataTemplate views:Register}" /> -->
+
+    <!-- Main (root namespace, not Views) -->
+    <ShellContent Route="Main" ContentTemplate="{DataTemplate pages:MainPage}" /> 
 
     <!-- auth -->
     <ShellContent Route="Login" ContentTemplate="{DataTemplate views:Login}" />
     <ShellContent Route="Register" ContentTemplate="{DataTemplate views:Register}" />
 
     <!-- app pages -->
-    <ShellContent Route="Home" ContentTemplate="{DataTemplate views:HomePage}" />
     <ShellContent Route="PlaceOrder" ContentTemplate="{DataTemplate views:PlaceOrder}" />
     <ShellContent Route="UpdateUser" ContentTemplate="{DataTemplate views:UpdateUser}" />
     <ShellContent Route="OrderHistory" ContentTemplate="{DataTemplate views:OrderHistory}" />
     <ShellContent Route="CurrentOrder" ContentTemplate="{DataTemplate views:CurrentOrder}" />
+    
 </Shell>
