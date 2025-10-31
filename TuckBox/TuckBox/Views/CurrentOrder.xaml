@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TuckBox.Views.CurrentOrder"
-             Title="CurrentOrder">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+<ContentPage
+    x:Class="TuckBox.Views.CurrentOrder"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Current Order">
+
+    <VerticalStackLayout Padding="16" Spacing="12">
+        <Label x:Name="StatusLabel" Text="Loading..." />
+        <CollectionView x:Name="ItemsList">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <HorizontalStackLayout>
+                        <Label Text="{Binding Food_Name}" />
+                        <Label Text="{Binding Quantity}" Margin="10,0,0,0"/>
+                        <Label Text="{Binding Option_Value}" Margin="10,0,0,0" />
+                    </HorizontalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 </ContentPage>
