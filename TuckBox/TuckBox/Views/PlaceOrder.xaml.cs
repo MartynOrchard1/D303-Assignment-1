@@ -229,7 +229,6 @@ public partial class PlaceOrder : ContentPage
     }
 }
 
-
     // Small visual tree helper
     static class VisualTreeExtensions
 {
