@@ -25,10 +25,6 @@
             <Button Text="UPDATE USER INFO" Command="{Binding GoUpdateUserCommand}" />
             <Button Text="ORDER HISTORY"    Command="{Binding GoOrderHistoryCommand}" />
 
-            <!-- cities debug / status -->
-            <Label x:Name="StatusLabel" Text="..." />
-            <CollectionView x:Name="CitiesList" IsVisible="False" />
-
             <!-- current order -->
             <Label Text="CURRENT ORDER" FontAttributes="Bold" FontSize="18" Margin="0,16,0,4"/>
 
