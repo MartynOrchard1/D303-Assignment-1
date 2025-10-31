@@ -95,6 +95,9 @@ public partial class MainPage : ContentPage
     {
         try
         {
+            // clear items first
+            CurrentOrderItems.ItemsSource = null;
+
             if (string.IsNullOrEmpty(_auth.CurrentUserId))
             {
                 CurrentOrderLabel.Text = "No current order.";
@@ -108,14 +111,13 @@ public partial class MainPage : ContentPage
                 return;
             }
 
-            // pick latest by date string (we saved dd/MM/yyyy HH:mm:ss)
+            // newest first
             var latest = orders
                 .Select(kv => kv.Value)
                 .OrderByDescending(o => o.Order_Date)
                 .First();
 
             var sb = new System.Text.StringBuilder();
-            //sb.AppendLine($"Order: {latest.Order_ID}");
             sb.AppendLine($"Date: {latest.Order_Date}");
             if (!string.IsNullOrEmpty(latest.City_Name))
                 sb.AppendLine($"City: {latest.City_Name}");
@@ -123,16 +125,19 @@ public partial class MainPage : ContentPage
                 sb.AppendLine($"Time: {latest.Time_Slot}");
             sb.AppendLine($"Total: {latest.Total_Price:C}");
 
-            // Show all ordered items
+            CurrentOrderLabel.Text = sb.ToString();
+
+            // 👇 bind items to horizontal list
             if (latest.Items != null && latest.Items.Count > 0)
             {
-                sb.AppendLine("\nItems Ordered:");
-                foreach (var item in latest.Items.Values)
-                {
-                    sb.AppendLine($"• {item.Food_Name} ({item.Option_Value}) x{item.Quantity} — {item.Line_Total:C}");
-                }
-            
-            CurrentOrderLabel.Text = sb.ToString();
+                CurrentOrderItems.IsVisible = true;
+                CurrentOrderItems.ItemsSource = latest.Items.Values.ToList();
+            }
+            else
+            {
+                CurrentOrderItems.IsVisible = false;
+            }
+
         }
         catch (Exception ex)
         {

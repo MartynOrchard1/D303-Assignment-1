@@ -25,18 +25,34 @@
             <Button Text="UPDATE USER INFO" Command="{Binding GoUpdateUserCommand}" />
             <Button Text="ORDER HISTORY"    Command="{Binding GoOrderHistoryCommand}" />
 
-            <!-- current order -->
             <Label Text="CURRENT ORDER" FontAttributes="Bold" FontSize="18" Margin="0,16,0,4"/>
 
-            <!-- NEW: this is where we show the latest order -->
+            <!-- summary text (order id, date, city, total) -->
             <Label x:Name="CurrentOrderLabel"
-                   Text="No current order."
-                   LineBreakMode="WordWrap" />
+       Text="No current order."
+       LineBreakMode="WordWrap" />
 
-            <!-- optional: link to full screen -->
-            <Button Text="View Current Order"
-                    Command="{Binding GoCurrentOrderCommand}"
-                    Margin="0,8,0,0" />
+            <!-- NEW: horizontal scroller for items -->
+            <CollectionView x:Name="CurrentOrderItems"
+                ItemsLayout="HorizontalList"
+                IsVisible="False"            
+                HeightRequest="110"
+                Margin="0,8,0,0" 
+                >
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="8" Margin="4" CornerRadius="8" BackgroundColor="#F5F5F5">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="{Binding Food_Name}" FontAttributes="Bold" FontSize="13" />
+                                <Label Text="{Binding Option_Value}" FontSize="11" TextColor="Gray" />
+                                <Label Text="{Binding Quantity, StringFormat='Qty: {0}'}" FontSize="11" />
+                                <Label Text="{Binding Line_Total, StringFormat='${0:F2}'}" FontSize="11" TextColor="#C2185B" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
         </VerticalStackLayout>
     </ScrollView>
