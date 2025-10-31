@@ -14,21 +14,33 @@
     <ScrollView>
         <VerticalStackLayout Padding="16" Spacing="12">
 
-            <!-- Header + big actions -->
+            <!-- WELCOME -->
             <Label x:Name="WelcomeLabel"
                    Text="WELCOME"
                    FontAttributes="Bold"
                    FontSize="22" />
 
+            <!-- big actions -->
             <Button Text="PLACE ORDER"      Command="{Binding GoPlaceOrderCommand}" />
             <Button Text="UPDATE USER INFO" Command="{Binding GoUpdateUserCommand}" />
             <Button Text="ORDER HISTORY"    Command="{Binding GoOrderHistoryCommand}" />
 
+            <!-- cities debug / status -->
+            <Label x:Name="StatusLabel" Text="..." />
+            <CollectionView x:Name="CitiesList" IsVisible="False" />
+
+            <!-- current order -->
             <Label Text="CURRENT ORDER" FontAttributes="Bold" FontSize="18" Margin="0,16,0,4"/>
 
-            <!-- Your existing UI -->
-            <Label x:Name="StatusLabel" Text="Loading..." />
-            <CollectionView x:Name="CitiesList" />
+            <!-- NEW: this is where we show the latest order -->
+            <Label x:Name="CurrentOrderLabel"
+                   Text="No current order."
+                   LineBreakMode="WordWrap" />
+
+            <!-- optional: link to full screen -->
+            <Button Text="View Current Order"
+                    Command="{Binding GoCurrentOrderCommand}"
+                    Margin="0,8,0,0" />
 
         </VerticalStackLayout>
     </ScrollView>
