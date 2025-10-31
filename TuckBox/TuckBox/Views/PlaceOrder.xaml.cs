@@ -160,75 +160,78 @@ public partial class PlaceOrder : ContentPage
 
     private async void OnPlaceOrderClicked(object sender, EventArgs e)
     {
+        // 1. must be logged in
         if (string.IsNullOrEmpty(_auth.CurrentIdToken) || string.IsNullOrEmpty(_auth.CurrentUserId))
         {
             await DisplayAlert("Not Signed In", "Please sign in again.", "OK");
             return;
         }
 
-        // 10:00 AM cutoff
-        if (DateTime.Now.TimeOfDay >= new TimeSpan(10, 0, 0))
+        // 2. NZ cutoff check (10:00am NZ)
+        var nzZone = TimeZoneInfo.FindSystemTimeZoneById("New Zealand Standard Time");
+        var nowNz = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, nzZone);
+        if (nowNz.TimeOfDay >= new TimeSpan(10, 0, 0))
         {
-            await DisplayAlert("Too Late", "Orders must be placed before 10:00 AM.", "OK");
+            await DisplayAlert("Too Late",
+                $"Orders must be placed before 10:00 AM NZ time.\nCurrent NZ time: {nowNz:HH:mm}",
+                "OK");
             return;
         }
 
+        // 3. basic selections
         var city = CityPicker.SelectedItem as City;
         var slot = SlotPicker.SelectedItem as TimeSlot;
         var addr = AddressPicker.SelectedItem as DeliveryAddress;
 
         if (city == null || slot == null || addr == null)
         {
-            await DisplayAlert("Missing Info", "Please select city, time slot, and address.", "OK");
+            await DisplayAlert("Missing Info", "Please select city, time slot, and delivery address.", "OK");
             return;
         }
 
+        // 4. build item list from what user picked on screen
+        var orderItems = new List<(Food food, int qty, string? option)>();
         bool any = false;
 
         foreach (var food in _foods)
         {
-            var q = _qty.TryGetValue(food.Food_ID, out var val) ? val : 0;
-            if (q <= 0) continue;
+            var qty = _qty.TryGetValue(food.Food_ID, out var q) ? q : 0;
+            if (qty <= 0) continue;
 
             any = true;
-            var selected = _selectedOption.TryGetValue(food.Food_ID, out var opt) ? opt : "";
+            _selectedOption.TryGetValue(food.Food_ID, out var optVal);
 
-            var order = new Order
-            {
-                Order_ID = Guid.NewGuid().ToString(),
-                Order_Date = DateTime.UtcNow,
-                Quantity = q,
-                Food_ID = food.Food_ID,
-                City_ID = city.City_ID,
-                TimeSlot_ID = slot.TimeSlot_ID,
-                User_ID = _auth.CurrentUserId!,
-                Address_ID = addr.Address_ID,
-                Option_Key = food.Option_Key,
-                Option_Value = selected,
-                Total_Price = food.Price * q
-            };
-
-            var ok = await _db.PlaceOrderAsync(_auth.CurrentUserId!, order);
-            if (!ok)
-            {
-                await DisplayAlert("Error", $"Failed to place {food.Food_Name}.", "OK");
-                return;
-            }
+            orderItems.Add((food, qty, optVal));
         }
 
         if (!any)
         {
-            await DisplayAlert("No Items", "Add at least one meal.", "OK");
+            await DisplayAlert("No Items", "Please select at least one meal.", "OK");
             return;
         }
 
-        await DisplayAlert("Success", "Your order has been placed!", "OK");
+        // 5. call the NEW service method ONCE
+        var ok = await _db.PlaceOrderAsync(
+            _auth.CurrentUserId!,
+            city,
+            slot,
+            addr,
+            orderItems);
+
+        if (!ok)
+        {
+            await DisplayAlert("Error", "Could not place the order. Try again.", "OK");
+            return;
+        }
+
+        await DisplayAlert("Success", "Your order has been placed.", "OK");
         await Shell.Current.GoToAsync("CurrentOrder");
     }
 }
 
-// Small visual tree helper
-static class VisualTreeExtensions
+
+    // Small visual tree helper
+    static class VisualTreeExtensions
 {
     public static T? FindParent<T>(this Element element) where T : Element
     {

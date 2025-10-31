@@ -164,24 +164,79 @@ namespace TuckBox.Services
         }
 
         // -------- Orders (Orders/{uid}/{orderId}) --------
-        public async Task<bool> PlaceOrderAsync(string uid, Order order)
-        {
-            try
+
+            public async Task<bool> PlaceOrderAsync(
+                string userId,
+                City city,
+                TimeSlot slot,
+                DeliveryAddress address,
+                List<(Food food, int qty, string? option)> items)
             {
-                var json = JsonSerializer.Serialize(order);
+                if (string.IsNullOrEmpty(userId))
+                    throw new ArgumentException("userId is required");
+
+                // 1) make a single order id
+                var orderId = $"ord-{Guid.NewGuid():N}".Substring(0, 12);
+
+                // 2) NZ time
+                var nzZone = TimeZoneInfo.FindSystemTimeZoneById("New Zealand Standard Time");
+                var nowNz = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, nzZone);
+                var formattedNz = nowNz.ToString("dd/MM/yyyy HH:mm:ss");
+
+                // 3) build items
+                var itemsDict = new Dictionary<string, object>();
+                decimal total = 0m;
+
+                foreach (var (food, qty, opt) in items)
+                {
+                    if (qty <= 0) continue;
+
+                    var lineTotal = (decimal)food.Price * qty;
+                    total += lineTotal;
+
+                    itemsDict[food.Food_ID] = new
+                    {
+                        Food_ID = food.Food_ID,
+                        Food_Name = food.Food_Name,
+                        Quantity = qty,
+                        Option_Key = food.Option_Key,
+                        Option_Value = opt ?? "",
+                        Unit_Price = food.Price,
+                        Line_Total = lineTotal
+                    };
+                }
+
+                if (itemsDict.Count == 0)
+                    return false; // nothing to save
+
+                // 4) final order payload
+                var orderPayload = new
+                {
+                    Order_ID = orderId,
+                    Order_Date = formattedNz,
+                    City_ID = city.City_ID,
+                    City_Name = city.City_Name,
+                    Time_Slot_ID = slot.TimeSlot_ID,
+                    Time_Slot = slot.Time_Slot,
+                    Address_ID = address.Address_ID,
+                    Address = address.Address,
+                    User_ID = userId,
+                    Total_Price = total,
+                    Items = itemsDict
+                };
+
+                // 5) POST/PUT to firebase
+                // /Orders/{orderId}.json?auth=...
+                var url = BuildUrl($"Orders/{orderId}");
+                var json = JsonSerializer.Serialize(orderPayload);
                 var resp = await _http.PutAsync(
-                    BuildUrl($"Orders/{uid}/{order.Order_ID}"),
-                    new StringContent(json, Encoding.UTF8, "application/json")
-                );
+                    url,
+                    new StringContent(json, Encoding.UTF8, "application/json"));
+
                 var body = await resp.Content.ReadAsStringAsync();
-                System.Diagnostics.Debug.WriteLine($"[DEBUG] PlaceOrder status={resp.StatusCode} body={body}");
+                System.Diagnostics.Debug.WriteLine($"[DEBUG] PlaceOrderAsync status={resp.StatusCode} body={body}");
+
                 return resp.IsSuccessStatusCode;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[ERROR] PlaceOrderAsync failed: {ex.Message}");
-                return false;
             }
         }
     }
-}
