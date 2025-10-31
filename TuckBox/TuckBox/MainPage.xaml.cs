@@ -88,6 +88,7 @@ public partial class MainPage : ContentPage
             System.Diagnostics.Debug.WriteLine($"[DEBUG] LoadUserName failed: {ex}");
             WelcomeLabel.Text = "WELCOME";
         }
+    }
 
     // 👇 NEW: pull latest order for current user and show in label
     private async Task LoadCurrentOrder()
