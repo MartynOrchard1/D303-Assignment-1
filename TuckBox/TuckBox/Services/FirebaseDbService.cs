@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 using TuckBox.Models;
+using System.Linq;
 
 namespace TuckBox.Services
 {
@@ -92,6 +93,27 @@ namespace TuckBox.Services
                 System.Diagnostics.Debug.WriteLine($"[ERROR] GetFoodsAsync failed: {ex.Message}");
                 return new();
             }
+        }
+
+        // Get orders
+        public async Task<Dictionary<string, Order>> GetOrdersForUserAsync(string userId)
+        {
+            // get everything under /Orders
+            var resp = await _http.GetAsync(BuildUrl("Orders"));
+            var body = await resp.Content.ReadAsStringAsync();
+            System.Diagnostics.Debug.WriteLine($"[DEBUG] GetOrdersForUser status={resp.StatusCode} body={body}");
+
+            if (!resp.IsSuccessStatusCode || string.IsNullOrWhiteSpace(body) || body == "null")
+                return new();
+
+            var all = JsonSerializer.Deserialize<Dictionary<string, Order>>(body) ?? new();
+
+            // filter to just this user
+            var mine = all
+                .Where(kvp => kvp.Value != null && kvp.Value.User_ID == userId)
+                .ToDictionary(k => k.Key, v => v.Value);
+
+            return mine;
         }
 
         // -------- User Profile (Users/{uid}) --------
