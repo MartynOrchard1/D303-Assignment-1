@@ -35,5 +35,18 @@ namespace TuckBox.Models
 
         // items
         public Dictionary<string, OrderItem>? Items { get; set; }  // <-- NEW
+
+        // ✅ Helper for display
+        [Ignore]
+        public string ItemsSummary
+        {
+            get
+            {
+                if (Items == null || Items.Count == 0)
+                    return "(No items)";
+                return string.Join(", ",
+                    Items.Values.Select(i => $"{i.Food_Name} × {i.Quantity}"));
+            }
+        }
     }
 }

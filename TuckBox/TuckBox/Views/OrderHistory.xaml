@@ -5,18 +5,33 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="Order History">
 
-    <CollectionView x:Name="OrdersList">
-        <CollectionView.ItemTemplate>
-            <DataTemplate>
-                <Frame Margin="10" Padding="10">
-                    <VerticalStackLayout>
-                        <Label Text="{Binding Order_Date}" FontAttributes="Bold" />
-                        <Label Text="{Binding City_Name}" />
-                        <Label Text="{Binding Time_Slot}" />
-                        <Label Text="{Binding Total_Price, StringFormat='Total: {0:C}'}" />
-                    </VerticalStackLayout>
-                </Frame>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
-    </CollectionView>
+    <!-- top-right menu same as main -->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Home"          Command="{Binding GoHomeCommand}" />
+        <ToolbarItem Text="Place Order"   Command="{Binding GoPlaceOrderCommand}" />
+        <ToolbarItem Text="Update User"   Command="{Binding GoUpdateUserCommand}" />
+        <ToolbarItem Text="Sign Out"      Command="{Binding SignOutCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <RefreshView x:Name="RefreshContainer" Command="{Binding RefreshCommand}">
+        <CollectionView x:Name="OrdersList"
+                        ItemsSource="{Binding Orders}"
+                        Margin="12">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,6"
+                           Padding="10"
+                           CornerRadius="10"
+                           BorderColor="#ccc">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="{Binding OrderDate}" FontAttributes="Bold" />
+                            <Label Text="{Binding CityAndSlot}" FontSize="12" TextColor="Gray" />
+                            <Label Text="{Binding ItemsSummary}" FontSize="13" />
+                            <Label Text="{Binding Total}" FontAttributes="Bold" TextColor="Green" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
 </ContentPage>

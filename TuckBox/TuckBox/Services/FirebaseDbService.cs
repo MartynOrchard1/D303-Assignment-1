@@ -117,6 +117,28 @@ namespace TuckBox.Services
             return mine;
         }
 
+        public async Task<Dictionary<string, Order>> GetOrdersAsync(string uid, string idToken)
+        {
+            try
+            {
+                var url = $"{_dbUrl}/Orders/{uid}.json?auth={idToken}";
+                var resp = await _http.GetAsync(url);
+                var body = await resp.Content.ReadAsStringAsync();
+
+                System.Diagnostics.Debug.WriteLine($"[DEBUG] GetOrders status={resp.StatusCode} body={body}");
+                resp.EnsureSuccessStatusCode();
+
+                var orders = JsonSerializer.Deserialize<Dictionary<string, Order>>(body);
+                return orders ?? new();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[ERROR] GetOrdersAsync failed: {ex.Message}");
+                return new();
+            }
+        }
+
+
         // -------- User Profile (Users/{uid}) --------
         public async Task<bool> UpsertUserProfileAsync(Models.User profile, string idToken)
         {

@@ -170,7 +170,7 @@ public partial class PlaceOrder : ContentPage
         // 2. NZ cutoff check (10:00am NZ)
         var nzZone = TimeZoneInfo.FindSystemTimeZoneById("New Zealand Standard Time");
         var nowNz = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, nzZone);
-        if (nowNz.TimeOfDay >= new TimeSpan(10, 0, 0))
+        if (nowNz.TimeOfDay >= new TimeSpan(10, 0, 0)) // Change the '10' to change the cutoff time (24H Clock)
         {
             await DisplayAlert("Too Late",
                 $"Orders must be placed before 10:00 AM NZ time.\nCurrent NZ time: {nowNz:HH:mm}",
