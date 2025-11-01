@@ -22,6 +22,11 @@ namespace TuckBox.Models
         public string Mobile { get; set; } = string.Empty;
         public long Created_Utc { get; set; }
         public long Updated_Utc { get; set; }
+        public string? Delivery_Address { get; set; } = string.Empty;
+
+        public string? City_ID { get; set; } = string.Empty;
+
+        public string? City_Name { get; set; } = string.Empty;
 
     }
 }
