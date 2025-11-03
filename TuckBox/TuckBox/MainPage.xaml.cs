@@ -90,7 +90,7 @@ public partial class MainPage : ContentPage
         }
     }
 
-    // 👇 NEW: pull latest order for current user and show in label
+    // Pull latest order for current user and show in label
     private async Task LoadCurrentOrder()
     {
         try
@@ -127,7 +127,7 @@ public partial class MainPage : ContentPage
 
             CurrentOrderLabel.Text = sb.ToString();
 
-            // 👇 bind items to horizontal list
+            // Bind items to horizontal list
             if (latest.Items != null && latest.Items.Count > 0)
             {
                 CurrentOrderItems.IsVisible = true;
