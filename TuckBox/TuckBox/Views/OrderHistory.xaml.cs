@@ -51,7 +51,6 @@ public partial class OrderHistory : ContentPage
         {
             RefreshContainer.IsRefreshing = true;
 
-            // this is the method we added earlier in FirebaseDbService
             var rawOrders = await _db.GetOrdersForUserAsync(_auth.CurrentUserId);
 
             Orders.Clear();
@@ -93,7 +92,7 @@ public partial class OrderHistory : ContentPage
         };
     }
 
-    // this is the shape the XAML is actually binding to
+    // Xaml Shape for displaying an order
     public class OrderDisplay
     {
         public string OrderDate { get; set; } = "";
