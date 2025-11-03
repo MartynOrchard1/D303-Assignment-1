@@ -61,8 +61,8 @@ public partial class MainPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await LoadCurrentOrder();   // 👈 NEW
-        await LoadUserName();   // 👈 NEW
+        await LoadCurrentOrder();   
+        await LoadUserName();   
 
     }
 
@@ -90,7 +90,7 @@ public partial class MainPage : ContentPage
         }
     }
 
-    // 👇 NEW: pull latest order for current user and show in label
+    // Pull latest order for current user and show in label
     private async Task LoadCurrentOrder()
     {
         try
@@ -127,7 +127,7 @@ public partial class MainPage : ContentPage
 
             CurrentOrderLabel.Text = sb.ToString();
 
-            // 👇 bind items to horizontal list
+            // Bind items to horizontal list
             if (latest.Items != null && latest.Items.Count > 0)
             {
                 CurrentOrderItems.IsVisible = true;
@@ -150,12 +150,23 @@ public partial class MainPage : ContentPage
     {
         try
         {
-            _auth.SignOut(); // clear tokens/secure storage
-            await Shell.Current.GoToAsync("Login");
+            _auth.SignOut(); // clear tokens
+
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                // Close any modals first
+                while (Shell.Current.Navigation.ModalStack.Count > 0)
+                    await Shell.Current.Navigation.PopModalAsync(false);
+
+                // Absolute route to the Login shell content
+                await Shell.Current.GoToAsync("///Login");
+            });
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"[SignOut ERROR] {ex}");
+            await DisplayAlert("Sign out", "Something went wrong while signing out.", "OK");
         }
     }
+
 }

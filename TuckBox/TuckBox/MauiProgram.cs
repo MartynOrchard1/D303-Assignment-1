@@ -21,7 +21,7 @@ namespace TuckBox
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            // ✅ Load configuration ONCE from appsettings.json
+            // Load Config from appsettings.json
             var cfg = LoadConfig();
             var apiKey = cfg["FirebaseApiKey"];
             var dbUrl = cfg["FirebaseDbUrl"];
@@ -33,31 +33,24 @@ namespace TuckBox
             System.Diagnostics.Debug.WriteLine($"[DEBUG] GoogleClientId: {googleClientId}");
             System.Diagnostics.Debug.WriteLine($"[DEBUG] GoogleRedirectUri: {googleRedirectUri}");
 
-            // ✅ Local SQLite Database
+            // Local SQLite Database
             builder.Services.AddSingleton<AppDb>(sp =>
             {
                 var dbPath = Path.Combine(FileSystem.AppDataDirectory, "tuckbox.db3");
                 return new AppDb(dbPath);
             });
 
-            // ✅ Firebase Authentication Service (singleton)
+            // Firebase Authentication Service
             builder.Services.AddSingleton(new FirebaseAuthService(apiKey));
-
-            // after you've already created the singleton FirebaseAuthService(apiKey)
             builder.Services.AddSingleton(sp =>
             {
-                var cfg = LoadConfig(); // your helper that reads appsettings.json
+                var cfg = LoadConfig(); // Helper to read appsettings.json
                 var dbUrl = cfg["FirebaseDbUrl"];
-                var auth = sp.GetRequiredService<FirebaseAuthService>(); // SAME instance with token
+                var auth = sp.GetRequiredService<FirebaseAuthService>(); 
                 return new FirebaseDbService(dbUrl, auth);
             });
 
-
-            // ✅ Firebase Realtime Database Service (public access for now)
-            //   → Uses only DB URL; no auth token required
-            //builder.Services.AddSingleton(new FirebaseDbService(dbUrl));
-
-            // ✅ ViewModels
+            // ViewModels
             builder.Services.AddTransient<LoginViewModel>(sp =>
             {
                 var auth = sp.GetRequiredService<FirebaseAuthService>();
@@ -66,7 +59,7 @@ namespace TuckBox
 
             builder.Services.AddTransient<RegisterViewModel>();
 
-            // ✅ Pages
+            // Pages
             builder.Services.AddTransient<Login>();
             builder.Services.AddTransient<Register>();
             builder.Services.AddTransient<TuckBox.MainPage>();
@@ -78,7 +71,7 @@ namespace TuckBox
             return builder.Build();
         }
 
-        // ✅ Helper to load JSON config only once
+        // Helper to load JSON config only once
         private static Dictionary<string, string> LoadConfig()
         {
             using var stream = FileSystem.OpenAppPackageFileAsync("appsettings.json").Result;

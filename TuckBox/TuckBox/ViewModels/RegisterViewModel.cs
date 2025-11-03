@@ -57,10 +57,10 @@ public partial class RegisterViewModel : ObservableObject
             Updated_Utc = now
         };
 
-        // Ensure we have a token
+        // Token Check
         if (string.IsNullOrEmpty(_auth.CurrentIdToken))
         {
-            // small wait to allow token propagation
+            // Allow token propagation
             await Task.Delay(300);
             if (string.IsNullOrEmpty(_auth.CurrentIdToken))
             {
@@ -78,9 +78,9 @@ public partial class RegisterViewModel : ObservableObject
         await _localDb.Conn.InsertOrReplaceAsync(profile);
 
         StatusMessage = "Registration successful!";
-        await Shell.Current.GoToAsync("Login"); // relative (route-only page)
+        await Shell.Current.GoToAsync("//Login"); // relative (route-only page)
     }
 
     [RelayCommand]
-    private async Task GoToLoginAsync() => await Shell.Current.GoToAsync("Login");
+    private async Task GoToLoginAsync() => await Shell.Current.GoToAsync("//Login");
 }

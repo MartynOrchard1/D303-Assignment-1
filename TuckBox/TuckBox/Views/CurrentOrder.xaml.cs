@@ -44,7 +44,7 @@ public partial class CurrentOrder : ContentPage
                            $"Time: {latest.Time_Slot}\n" +
                            $"Total: {latest.Total_Price:C}";
 
-        // show items if you want
+        // Show items
         ItemsList.ItemsSource = latest.Items?.Values?.ToList();
     }
 }

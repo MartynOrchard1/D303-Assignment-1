@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#512BD4</color>
-    <color name="colorPrimaryDark">#2B0B98</color>
-    <color name="colorAccent">#2B0B98</color>
+	<!-- TuckBox brand palette -->
+	<color name="colorPrimary">#FF8A42</color>
+	<!-- Warm orange -->
+	<color name="colorPrimaryDark">#E36F23</color>
+	<!-- Darker orange -->
+	<color name="colorPrimaryLight">#FFD5B3</color>
+	<!-- Soft tint -->
+	<color name="colorAccent">#00A896</color>
+	<!-- Teal accent -->
+
+	<!-- System fallback neutrals -->
+	<color name="colorBackground">#FFF7F1</color>
+	<!-- Cream surface -->
+	<color name="colorOnPrimary">#FFFFFF</color>
+	<!-- Text on orange -->
+	<color name="colorOnBackground">#1F2933</color>
+	<!-- Default text -->
 </resources>

@@ -9,10 +9,9 @@ namespace TuckBox.Services
     {
         private readonly string _dbUrl;
         private readonly HttpClient _http;
-        private readonly FirebaseAuthService? _auth; // optional (public-rules mode supported)
+        private readonly FirebaseAuthService? _auth; 
 
 
-        // Preferred: secure rules (auth != null)
         public FirebaseDbService(string dbUrl, FirebaseAuthService auth)
         {
             _dbUrl = dbUrl.TrimEnd('/');
@@ -20,7 +19,7 @@ namespace TuckBox.Services
             _auth = auth;
         }
 
-        // Fallback: public-rules mode (no token)
+        // Fallback: public-rules mode (no token) 
         public FirebaseDbService(string dbUrl)
         {
             _dbUrl = dbUrl.TrimEnd('/');
@@ -38,7 +37,7 @@ namespace TuckBox.Services
             return final;
         }
 
-        // -------- Cities --------
+        // Cities 
         public async Task<Dictionary<string, City>> GetCitiesAsync()
         {
             try
@@ -58,7 +57,7 @@ namespace TuckBox.Services
             }
         }
 
-        // -------- TimeSlots --------
+        // TimeSlots
         public async Task<Dictionary<string, TimeSlot>> GetTimeSlotsAsync()
         {
             try
@@ -77,7 +76,7 @@ namespace TuckBox.Services
             }
         }
 
-        // -------- Foods --------
+        // Foods 
         public async Task<Dictionary<string, Food>> GetFoodsAsync()
         {
             try
@@ -99,7 +98,6 @@ namespace TuckBox.Services
         // Get orders
         public async Task<Dictionary<string, Order>> GetOrdersForUserAsync(string userId)
         {
-            // get everything under /Orders
             var resp = await _http.GetAsync(BuildUrl("Orders"));
             var body = await resp.Content.ReadAsStringAsync();
             System.Diagnostics.Debug.WriteLine($"[DEBUG] GetOrdersForUser status={resp.StatusCode} body={body}");
@@ -109,7 +107,6 @@ namespace TuckBox.Services
 
             var all = JsonSerializer.Deserialize<Dictionary<string, Order>>(body) ?? new();
 
-            // filter to just this user
             var mine = all
                 .Where(kvp => kvp.Value != null && kvp.Value.User_ID == userId)
                 .ToDictionary(k => k.Key, v => v.Value);
@@ -139,7 +136,7 @@ namespace TuckBox.Services
         }
 
 
-        // -------- User Profile (Users/{uid}) --------
+        // User Profile (Users/{uid}) 
         public async Task<bool> UpsertUserProfileAsync(Models.User profile, string idToken)
         {
             if (string.IsNullOrEmpty(idToken)) throw new InvalidOperationException("Missing ID token");
@@ -167,7 +164,7 @@ namespace TuckBox.Services
             return JsonSerializer.Deserialize<Models.User>(body);
         }
 
-        // -------- Delivery Addresses (DeliveryAddresses/{uid}/{addressId}) --------
+        // Delivery Addresses (DeliveryAddresses/{uid}/{addressId}) 
         public async Task<Dictionary<string, DeliveryAddress>> GetUserAddressesAsync(string uid)
         {
             try
@@ -208,7 +205,7 @@ namespace TuckBox.Services
             }
         }
 
-        // -------- Orders (Orders/{uid}/{orderId}) --------
+        // Orders (Orders/{uid}/{orderId}) 
 
             public async Task<bool> PlaceOrderAsync(
                 string userId,
@@ -270,8 +267,7 @@ namespace TuckBox.Services
                     Items = itemsDict
                 };
 
-                // 5) POST/PUT to firebase
-                // /Orders/{orderId}.json?auth=...
+                // 5) POST to firebase
                 var url = BuildUrl($"Orders/{orderId}");
                 var json = JsonSerializer.Serialize(orderPayload);
                 var resp = await _http.PutAsync(

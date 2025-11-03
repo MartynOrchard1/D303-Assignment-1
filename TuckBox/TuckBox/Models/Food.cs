@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-// Models/Food.cs
 namespace TuckBox.Models
 {
     public class Food

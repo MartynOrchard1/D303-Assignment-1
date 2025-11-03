@@ -10,10 +10,10 @@ public partial class OrderHistory : ContentPage
     private readonly FirebaseAuthService _auth;
     private readonly FirebaseDbService _db;
 
-    // what the XAML binds to
+    // XAML Bind
     public ObservableCollection<OrderDisplay> Orders { get; } = new();
 
-    // toolbar commands
+    // Toolbar Commands
     public IAsyncRelayCommand RefreshCommand => new AsyncRelayCommand(LoadOrdersAsync);
     public Command GoHomeCommand => new(async () => await Shell.Current.GoToAsync("Main"));
     public Command GoPlaceOrderCommand => new(async () => await Shell.Current.GoToAsync("PlaceOrder"));
@@ -51,7 +51,6 @@ public partial class OrderHistory : ContentPage
         {
             RefreshContainer.IsRefreshing = true;
 
-            // this is the method we added earlier in FirebaseDbService
             var rawOrders = await _db.GetOrdersForUserAsync(_auth.CurrentUserId);
 
             Orders.Clear();
@@ -93,7 +92,7 @@ public partial class OrderHistory : ContentPage
         };
     }
 
-    // this is the shape the XAML is actually binding to
+    // Xaml Shape for displaying an order
     public class OrderDisplay
     {
         public string OrderDate { get; set; } = "";
