@@ -267,8 +267,7 @@ namespace TuckBox.Services
                     Items = itemsDict
                 };
 
-                // 5) POST/PUT to firebase
-                // /Orders/{orderId}.json?auth=...
+                // 5) POST to firebase
                 var url = BuildUrl($"Orders/{orderId}");
                 var json = JsonSerializer.Serialize(orderPayload);
                 var resp = await _http.PutAsync(
