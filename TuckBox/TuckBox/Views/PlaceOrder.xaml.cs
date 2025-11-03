@@ -10,8 +10,8 @@ public partial class PlaceOrder : ContentPage
     private readonly FirebaseAuthService _auth;
 
     private readonly ObservableCollection<Food> _foods = new();
-    private readonly Dictionary<string, int> _qty = new();                 // Food_ID -> qty
-    private readonly Dictionary<string, string> _selectedOption = new();   // Food_ID -> opt
+    private readonly Dictionary<string, int> _qty = new();                 
+    private readonly Dictionary<string, string> _selectedOption = new();   
 
     public PlaceOrder(FirebaseDbService db, FirebaseAuthService auth)
     {
