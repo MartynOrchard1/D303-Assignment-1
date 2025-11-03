@@ -76,7 +76,7 @@ namespace TuckBox.Services
             }
         }
 
-        // -------- Foods --------
+        // Foods 
         public async Task<Dictionary<string, Food>> GetFoodsAsync()
         {
             try
