@@ -46,16 +46,11 @@ namespace TuckBox
             {
                 var cfg = LoadConfig(); // Helper to read appsettings.json
                 var dbUrl = cfg["FirebaseDbUrl"];
-                var auth = sp.GetRequiredService<FirebaseAuthService>(); // SAME instance with token
+                var auth = sp.GetRequiredService<FirebaseAuthService>(); 
                 return new FirebaseDbService(dbUrl, auth);
             });
 
-
-            // ✅ Firebase Realtime Database Service (public access for now)
-            //   → Uses only DB URL; no auth token required
-            //builder.Services.AddSingleton(new FirebaseDbService(dbUrl));
-
-            // ✅ ViewModels
+            // ViewModels
             builder.Services.AddTransient<LoginViewModel>(sp =>
             {
                 var auth = sp.GetRequiredService<FirebaseAuthService>();
@@ -64,7 +59,7 @@ namespace TuckBox
 
             builder.Services.AddTransient<RegisterViewModel>();
 
-            // ✅ Pages
+            // Pages
             builder.Services.AddTransient<Login>();
             builder.Services.AddTransient<Register>();
             builder.Services.AddTransient<TuckBox.MainPage>();
