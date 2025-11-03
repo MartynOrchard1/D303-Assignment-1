@@ -83,10 +83,10 @@ public class FirebaseAuthService
         }
     }
 
-    public async Task<string?> SignInWithGoogleAsync(
+    public async Task<string?> SignInWithGoogleAsync( // This doesnt really work with Visual Studio for some reason amardeep wanted to ask you in class how it worked but focused on the rest of the assignment instead still cool how far i got with it tho, think i ran into a problem with google security rules.
         string googleClientId,
-        string authRedirectUriHttps,   // e.g. https://MartynOrchard1.github.io/
-        string appCallbackUriCustom    // e.g. com.google...:/oauth2redirect
+        string authRedirectUriHttps,   
+        string appCallbackUriCustom    
     )
     {
         try
@@ -99,7 +99,7 @@ public class FirebaseAuthService
             var authorizeUrl =
                 "https://accounts.google.com/o/oauth2/v2/auth" +
                 $"?client_id={Uri.EscapeDataString(googleClientId)}" +
-                $"&redirect_uri={Uri.EscapeDataString(authRedirectUriHttps)}" + // Google only allows HTTPS
+                $"&redirect_uri={Uri.EscapeDataString(authRedirectUriHttps)}" + 
                 $"&response_type=code" +
                 $"&scope={Uri.EscapeDataString(scope)}" +
                 $"&code_challenge={Uri.EscapeDataString(codeChallenge)}" +
@@ -124,7 +124,7 @@ public class FirebaseAuthService
             string? authCode = null;
             result.Properties.TryGetValue("code", out authCode);
 
-            // 🔸 Fallback: some providers return an id_token directly instead of code
+            // Fall back
             if (string.IsNullOrEmpty(authCode) && result.Properties.TryGetValue("id_token", out var directIdToken))
             {
                 System.Diagnostics.Debug.WriteLine("[DEBUG] No 'code' found; got 'id_token' directly – using implicit flow fallback.");
