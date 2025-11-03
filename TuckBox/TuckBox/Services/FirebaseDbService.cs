@@ -164,7 +164,7 @@ namespace TuckBox.Services
             return JsonSerializer.Deserialize<Models.User>(body);
         }
 
-        // -------- Delivery Addresses (DeliveryAddresses/{uid}/{addressId}) --------
+        // Delivery Addresses (DeliveryAddresses/{uid}/{addressId}) 
         public async Task<Dictionary<string, DeliveryAddress>> GetUserAddressesAsync(string uid)
         {
             try
