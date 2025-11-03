@@ -14,14 +14,14 @@ namespace TuckBox.Views
         {
             base.OnAppearing();
 
-            // simple fade in
+            // Fade in
             SplashContent.Opacity = 0;
             await SplashContent.FadeTo(1, 400, Easing.CubicIn);
 
-            // keep your 2s-ish delay
+            // Delay
             await Task.Delay(1500);
 
-            // then go to login (or main if logged in)
+            // Nav to login
             await Shell.Current.GoToAsync("//Login");
         }
     }

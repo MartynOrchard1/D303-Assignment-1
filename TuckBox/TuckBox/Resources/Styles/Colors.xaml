@@ -24,7 +24,6 @@
     <Color x:Key="Gray600">#4B5563</Color>
     <Color x:Key="Gray900">#111827</Color>
     <Color x:Key="Gray950">#141414</Color>
-    <!-- kept for compat -->
 
     <!-- ===== Legacy keys preserved (pointed to new palette) ===== -->
     <Color x:Key="Primary">#FF8A42</Color>

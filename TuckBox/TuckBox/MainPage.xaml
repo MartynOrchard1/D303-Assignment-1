@@ -32,7 +32,7 @@
        Text="No current order."
        LineBreakMode="WordWrap" />
 
-            <!-- NEW: horizontal scroller for items -->
+            <!-- Horizontal scroller for items -->
             <CollectionView x:Name="CurrentOrderItems"
                 ItemsLayout="HorizontalList"
                 IsVisible="False"            
