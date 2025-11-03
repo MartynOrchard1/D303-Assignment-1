@@ -71,7 +71,7 @@ namespace TuckBox
             return builder.Build();
         }
 
-        // ✅ Helper to load JSON config only once
+        // Helper to load JSON config only once
         private static Dictionary<string, string> LoadConfig()
         {
             using var stream = FileSystem.OpenAppPackageFileAsync("appsettings.json").Result;
