@@ -98,7 +98,6 @@ namespace TuckBox.Services
         // Get orders
         public async Task<Dictionary<string, Order>> GetOrdersForUserAsync(string userId)
         {
-            // get everything under /Orders
             var resp = await _http.GetAsync(BuildUrl("Orders"));
             var body = await resp.Content.ReadAsStringAsync();
             System.Diagnostics.Debug.WriteLine($"[DEBUG] GetOrdersForUser status={resp.StatusCode} body={body}");
@@ -108,7 +107,6 @@ namespace TuckBox.Services
 
             var all = JsonSerializer.Deserialize<Dictionary<string, Order>>(body) ?? new();
 
-            // filter to just this user
             var mine = all
                 .Where(kvp => kvp.Value != null && kvp.Value.User_ID == userId)
                 .ToDictionary(k => k.Key, v => v.Value);
@@ -138,7 +136,7 @@ namespace TuckBox.Services
         }
 
 
-        // -------- User Profile (Users/{uid}) --------
+        // User Profile (Users/{uid}) 
         public async Task<bool> UpsertUserProfileAsync(Models.User profile, string idToken)
         {
             if (string.IsNullOrEmpty(idToken)) throw new InvalidOperationException("Missing ID token");
