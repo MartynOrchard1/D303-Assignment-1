@@ -7,7 +7,7 @@ namespace TuckBox
     {
         private readonly AppDb _db;
 
-        // DI constructor stays — good
+        // DI constructor 
         public App(AppDb db)
         {
             InitializeComponent();
@@ -17,13 +17,12 @@ namespace TuckBox
             _ = InitializeAsync();
         }
 
-        // ✅ MAUI 9+ startup pattern
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            // Do NOT call base.CreateWindow — return your own Window
+            // return your window
             var window = new Window(new AppShell());
 
-            // Start at Splash once Shell is attached
+            // Start at Splash if shell is attached
             window.Dispatcher.Dispatch(async () =>
             {
                 try
