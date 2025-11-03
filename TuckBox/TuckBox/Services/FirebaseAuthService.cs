@@ -145,7 +145,7 @@ public class FirebaseAuthService
 
                 var fbDoc = JsonDocument.Parse(fbBodyFallback);
 
-                // ✅ ADDED: capture ID token + UID after signInWithIdp
+                // Capture ID token + UID after signInWithIdp
                 CurrentUserId = fbDoc.RootElement.GetProperty("localId").GetString();
                 CurrentIdToken = fbDoc.RootElement.GetProperty("idToken").GetString();
 
@@ -166,7 +166,7 @@ public class FirebaseAuthService
                     ["code"] = authCode,
                     ["client_id"] = googleClientId,
                     ["code_verifier"] = codeVerifier,
-                    ["redirect_uri"] = authRedirectUriHttps,  // must match exactly what was sent in auth step
+                    ["redirect_uri"] = authRedirectUriHttps,  
                     ["grant_type"] = "authorization_code"
                 })
             };
@@ -202,7 +202,7 @@ public class FirebaseAuthService
 
             var fbDoc2 = JsonDocument.Parse(fbBody);
 
-            // ✅ ADDED: capture ID token + UID after signInWithIdp
+            // Capture ID token + UID after signInWithIdp
             CurrentUserId = fbDoc2.RootElement.GetProperty("localId").GetString();
             CurrentIdToken = fbDoc2.RootElement.GetProperty("idToken").GetString();
 
