@@ -13,7 +13,7 @@ namespace TuckBox
             InitializeComponent();
             _db = db;
 
-            // Fire-and-forget DB init + seed
+            // Fire-and-forget DB init + seed 
             _ = InitializeAsync();
         }
 
