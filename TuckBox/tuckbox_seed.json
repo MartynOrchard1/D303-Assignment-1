@@ -1,0 +1,58 @@
+{
+  "Cities": {
+    "city-pn": { "City_ID": "city-pn", "City_Name": "Palmerston North" },
+    "city-fe": { "City_ID": "city-fe", "City_Name": "Feilding" },
+    "city-ah": { "City_ID": "city-ah", "City_Name": "Ashhurst" },
+    "city-lb": { "City_ID": "city-lb", "City_Name": "Longburn" }
+  },
+
+  "TimeSlots": {
+    "ts-1145": { "Time_Slot_ID": "ts-1145", "Time_Slot": "11:45–12:15" },
+    "ts-1215": { "Time_Slot_ID": "ts-1215", "Time_Slot": "12:15–12:45" },
+    "ts-1245": { "Time_Slot_ID": "ts-1245", "Time_Slot": "12:45–13:15" },
+    "ts-1315": { "Time_Slot_ID": "ts-1315", "Time_Slot": "13:15–13:45" }
+  },
+
+  "Foods": {
+    "food-salad": {
+      "Food_ID": "food-salad",
+      "Food_Name": "Green Salad Lunch",
+      "Description": "Fresh greens with your choice of dressing.",
+      "Price": 9.50,
+      "Option_Key": "dressing",
+      "Option_Values": ["none", "ranch", "vinaigrette"],
+      "Image": "green_salad_lunch.png"
+    },
+    "food-korma": {
+      "Food_ID": "food-korma",
+      "Food_Name": "Lamb Korma",
+      "Description": "Rich, creamy curry with tender lamb.",
+      "Price": 12.00,
+      "Option_Key": "spice",
+      "Option_Values": ["mild", "med", "hot"],
+      "Image": "lamb_korma.png"
+    },
+    "food-chicken": {
+      "Food_ID": "food-chicken",
+      "Food_Name": "Open Chicken Sandwich",
+      "Description": "Grilled chicken with your choice of bread.",
+      "Price": 10.00,
+      "Option_Key": "bread",
+      "Option_Values": ["white", "rye", "wholemeal"],
+      "Image": "open_chicken_sandwich.png"
+    },
+    "food-noodles": {
+      "Food_ID": "food-noodles",
+      "Food_Name": "Beef Noodle Salad",
+      "Description": "Chilled noodles, crisp veg, marinated beef.",
+      "Price": 11.00,
+      "Option_Key": "chilli",
+      "Option_Values": ["no chilli flakes", "regular chilli flakes", "extra chilli flakes"],
+      "Image": "beef_noodle_salad.png"
+    }
+  },
+
+  "Users": {},
+  "DeliveryAddresses": {},
+  "Orders": {}
+}
