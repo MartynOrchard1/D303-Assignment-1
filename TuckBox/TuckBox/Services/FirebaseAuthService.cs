@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.Maui.Authentication; // WebAuthenticator
+using Microsoft.Maui.Authentication; 
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -12,9 +12,9 @@ public class FirebaseAuthService
     private readonly HttpClient _http;
     private readonly string _apiKey;
 
-    // ✅ ADDED: expose the current Firebase ID token + UID for REST calls (e.g., Realtime DB ?auth=ID_TOKEN)
-    public string? CurrentIdToken { get; private set; }   // Firebase ID token (JWT)
-    public string? CurrentUserId { get; private set; }   // Firebase UID (localId)
+    // Expose the current Firebase ID token + UID for REST calls (e.g., Realtime DB ?auth=ID_TOKEN)
+    public string? CurrentIdToken { get; private set; }   
+    public string? CurrentUserId { get; private set; }   
 
     public string? CurrentUid => CurrentUserId;
 
