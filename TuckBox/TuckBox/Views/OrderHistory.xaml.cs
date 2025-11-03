@@ -10,10 +10,10 @@ public partial class OrderHistory : ContentPage
     private readonly FirebaseAuthService _auth;
     private readonly FirebaseDbService _db;
 
-    // what the XAML binds to
+    // XAML Bind
     public ObservableCollection<OrderDisplay> Orders { get; } = new();
 
-    // toolbar commands
+    // Toolbar Commands
     public IAsyncRelayCommand RefreshCommand => new AsyncRelayCommand(LoadOrdersAsync);
     public Command GoHomeCommand => new(async () => await Shell.Current.GoToAsync("Main"));
     public Command GoPlaceOrderCommand => new(async () => await Shell.Current.GoToAsync("PlaceOrder"));
