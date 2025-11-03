@@ -8,10 +8,8 @@ namespace TuckBox.Models
         [PrimaryKey]
         public string Order_ID { get; set; } = string.Empty;
 
-        // we now store NZ formatted date, but keep DateTime? too if you want
         public string Order_Date { get; set; } = string.Empty;
 
-        // who placed it
         [Indexed]
         public string User_ID { get; set; } = string.Empty;
 
@@ -30,7 +28,6 @@ namespace TuckBox.Models
         public string Address_ID { get; set; } = string.Empty;
         public string? Address { get; set; }     // <-- NEW
 
-        // money
         public decimal Total_Price { get; set; } = 0m;
 
         // items
