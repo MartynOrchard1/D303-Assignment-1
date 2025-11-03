@@ -57,7 +57,7 @@ public partial class RegisterViewModel : ObservableObject
             Updated_Utc = now
         };
 
-        // Ensure we have a token
+        // Token Check
         if (string.IsNullOrEmpty(_auth.CurrentIdToken))
         {
             // small wait to allow token propagation
