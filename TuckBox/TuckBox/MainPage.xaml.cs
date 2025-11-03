@@ -151,11 +151,22 @@ public partial class MainPage : ContentPage
         try
         {
             _auth.SignOut(); // clear tokens/secure storage
-            await Shell.Current.GoToAsync("Login");
+
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                // Close any modals first
+                while (Shell.Current.Navigation.ModalStack.Count > 0)
+                    await Shell.Current.Navigation.PopModalAsync(false);
+
+                // Absolute route to the Login shell content
+                await Shell.Current.GoToAsync("///Login");
+            });
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"[SignOut ERROR] {ex}");
+            await DisplayAlert("Sign out", "Something went wrong while signing out.", "OK");
         }
     }
+
 }

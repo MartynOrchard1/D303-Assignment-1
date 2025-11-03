@@ -4,8 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="TuckBox"
-    Shell.NavBarIsVisible="True"
-    BackgroundColor="{StaticResource TuckSurface}">
+    Shell.NavBarIsVisible="True">
 
     <!-- 3-dot overflow menu -->
     <ContentPage.ToolbarItems>
@@ -13,92 +12,47 @@
     </ContentPage.ToolbarItems>
 
     <ScrollView>
-        <VerticalStackLayout Spacing="14">
+        <VerticalStackLayout Padding="16" Spacing="12">
 
-            <!-- top header -->
-            <Grid BackgroundColor="{StaticResource TuckPrimary}" Padding="16,30,16,16">
-                <VerticalStackLayout Spacing="4">
-                    <Label x:Name="WelcomeLabel"
-                           Text="WELCOME"
-                           FontSize="22"
-                           FontAttributes="Bold"
-                           TextColor="White" />
-                    <Label Text="What would you like to do today?"
-                           TextColor="#FFEDE0"
-                           FontSize="13" />
-                </VerticalStackLayout>
-            </Grid>
+            <!-- WELCOME -->
+            <Label x:Name="WelcomeLabel"
+                   Text="WELCOME"
+                   FontAttributes="Bold"
+                   FontSize="22" />
 
-            <!-- actions -->
-            <HorizontalStackLayout Spacing="12" Padding="16,0,16,0">
-                <Frame Padding="14" CornerRadius="14" HasShadow="False" BackgroundColor="White"
-                       WidthRequest="120">
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Place" FontAttributes="Bold" />
-                        <Label Text="Order" FontAttributes="Bold" />
-                        <Button Text="Go" Command="{Binding GoPlaceOrderCommand}" HeightRequest="32" />
-                    </VerticalStackLayout>
-                </Frame>
+            <!-- big actions -->
+            <Button Text="PLACE ORDER"      Command="{Binding GoPlaceOrderCommand}" />
+            <Button Text="UPDATE USER INFO" Command="{Binding GoUpdateUserCommand}" />
+            <Button Text="ORDER HISTORY"    Command="{Binding GoOrderHistoryCommand}" />
 
-                <Frame Padding="14" CornerRadius="14" HasShadow="False" BackgroundColor="White"
-                       WidthRequest="120">
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Update" FontAttributes="Bold" />
-                        <Label Text="Profile" FontAttributes="Bold" />
-                        <Button Text="Go" Command="{Binding GoUpdateUserCommand}" HeightRequest="32" />
-                    </VerticalStackLayout>
-                </Frame>
+            <Label Text="CURRENT ORDER" FontAttributes="Bold" FontSize="18" Margin="0,16,0,4"/>
 
-                <Frame Padding="14" CornerRadius="14" HasShadow="False" BackgroundColor="White"
-                       WidthRequest="120">
-                    <VerticalStackLayout Spacing="6">
-                        <Label Text="Order" FontAttributes="Bold" />
-                        <Label Text="History" FontAttributes="Bold" />
-                        <Button Text="Go" Command="{Binding GoOrderHistoryCommand}" HeightRequest="32" />
-                    </VerticalStackLayout>
-                </Frame>
-            </HorizontalStackLayout>
+            <!-- summary text (order id, date, city, total) -->
+            <Label x:Name="CurrentOrderLabel"
+       Text="No current order."
+       LineBreakMode="WordWrap" />
 
-            <!-- current order block -->
-            <Label Text="Current order" FontAttributes="Bold" FontSize="18" Margin="16,10,16,0" />
+            <!-- NEW: horizontal scroller for items -->
+            <CollectionView x:Name="CurrentOrderItems"
+                ItemsLayout="HorizontalList"
+                IsVisible="False"            
+                HeightRequest="110"
+                Margin="0,8,0,0" 
+                >
 
-            <Frame Margin="16,0,16,0" Padding="12" CornerRadius="14" BackgroundColor="White" HasShadow="False">
-                <VerticalStackLayout Spacing="6">
-                    <Label x:Name="CurrentOrderLabel"
-                           Text="No current order."
-                           LineBreakMode="WordWrap" />
-
-                    <!-- horizontal list of items -->
-                    <CollectionView x:Name="CurrentOrderItems"
-                                    ItemsLayout="HorizontalList"
-                                    HeightRequest="110"
-                                    IsVisible="False">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Frame Padding="8" Margin="4" CornerRadius="10" BackgroundColor="#F6F6F6">
-                                    <VerticalStackLayout Spacing="4">
-                                        <Label Text="{Binding Food_Name}" FontAttributes="Bold" FontSize="13" />
-                                        <Label Text="{Binding Option_Value}" FontSize="11" TextColor="{StaticResource TuckMuted}" />
-                                        <Label Text="{Binding Quantity, StringFormat='Qty: {0}'}" FontSize="11" />
-                                        <Label Text="{Binding Line_Total, StringFormat='${0:F2}'}"
-                                               FontSize="11"
-                                               TextColor="{StaticResource TuckPrimary}" />
-                                    </VerticalStackLayout>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-
-                    <Button Text="View current order"
-                            Command="{Binding GoCurrentOrderCommand}"
-                            BackgroundColor="{StaticResource TuckPrimaryDark}"
-                            Margin="0,4,0,0" />
-                </VerticalStackLayout>
-            </Frame>
-
-            <!-- status + cities (can stay hidden) -->
-            <Label x:Name="StatusLabel" Text="" Margin="16,4,16,12" />
-            <CollectionView x:Name="CitiesList" IsVisible="False" />
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="8" Margin="4" CornerRadius="8" BackgroundColor="#F5F5F5">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="{Binding Food_Name}" FontAttributes="Bold" FontSize="13" />
+                                <Label Text="{Binding Option_Value}" FontSize="11" TextColor="Gray" />
+                                <Label Text="{Binding Quantity, StringFormat='Qty: {0}'}" FontSize="11" />
+                                <Label Text="{Binding Line_Total, StringFormat='${0:F2}'}" FontSize="11" TextColor="#C2185B" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
         </VerticalStackLayout>
     </ScrollView>
