@@ -1,20 +1,57 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TuckBox.Views.Splash"
-             Title="Splash"
-             BackgroundColor="{DynamicResource PageBackgroundColor}">
-    <Grid>
+<ContentPage
+    x:Class="TuckBox.Views.Splash"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    NavigationPage.HasNavigationBar="False"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="Transparent">
+
+    <ContentPage.Background>
+        <!-- warm tuckbox gradient -->
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FF8A42" Offset="0.0" />
+            <GradientStop Color="#FFE3C4" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid Padding="24">
         <VerticalStackLayout
-        HorizontalOptions="Center"
-        VerticalOptions="Center"
-        Spacing="16">
-            <Image x:Name="Logo"
-             Source="tuckbox_logo"
-             WidthRequest="160"
-             HeightRequest="160"
-             Opacity="0"
-             Scale="0.85"/>
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            Spacing="12"
+            x:Name="SplashContent">
+
+            <Frame
+                Padding="18"
+                CornerRadius="999"
+                BackgroundColor="White"
+                HasShadow="True">
+                <Image Source="tuckbox_logo.png"
+                       HeightRequest="90"
+                       WidthRequest="90"
+                       Aspect="AspectFit" />
+            </Frame>
+
+            <Label Text="TuckBox"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="#2E2E2E"
+                   HorizontalTextAlignment="Center" />
+
+            <Label Text="Fresh lunches • On time • Local"
+                   FontSize="14"
+                   TextColor="#5B5B5B"
+                   HorizontalTextAlignment="Center" />
+
         </VerticalStackLayout>
+
+        <!-- little loader at bottom -->
+        <ActivityIndicator
+            IsRunning="True"
+            Color="#2E2E2E"
+            HorizontalOptions="Center"
+            VerticalOptions="End"
+            Margin="0,0,0,30" />
     </Grid>
 </ContentPage>

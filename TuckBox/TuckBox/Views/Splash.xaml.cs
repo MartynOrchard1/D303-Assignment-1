@@ -1,31 +1,28 @@
-namespace TuckBox.Views;
+using System;
+using Microsoft.Maui.Controls;
 
-public partial class Splash : ContentPage
+namespace TuckBox.Views
 {
-    public Splash()
+    public partial class Splash : ContentPage
     {
-        InitializeComponent();
-        Loaded += OnLoaded;
+        public Splash()
+        {
+            InitializeComponent();
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            // simple fade in
+            SplashContent.Opacity = 0;
+            await SplashContent.FadeTo(1, 400, Easing.CubicIn);
+
+            // keep your 2s-ish delay
+            await Task.Delay(1500);
+
+            // then go to login (or main if logged in)
+            await Shell.Current.GoToAsync("//Login");
+        }
     }
-
-    private async void OnLoaded(object? sender, EventArgs e)
-    {
-        // Fade in logo + title
-        await Task.WhenAll(
-            Logo.FadeTo(1, 500, Easing.CubicOut)
-        );
-
-        // Pause (how long splash stays visible)
-        await Task.Delay(2000); // 2 seconds
-
-        // Optional fade out before navigating
-        await Task.WhenAll(
-            Logo.FadeTo(0, 500)
-        );
-
-        // Navigate to Login
-        await Shell.Current.GoToAsync("Login");
-    }
-
-
 }
