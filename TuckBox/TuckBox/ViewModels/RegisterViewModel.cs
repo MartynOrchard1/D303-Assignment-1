@@ -60,7 +60,7 @@ public partial class RegisterViewModel : ObservableObject
         // Token Check
         if (string.IsNullOrEmpty(_auth.CurrentIdToken))
         {
-            // small wait to allow token propagation
+            // Allow token propagation
             await Task.Delay(300);
             if (string.IsNullOrEmpty(_auth.CurrentIdToken))
             {
