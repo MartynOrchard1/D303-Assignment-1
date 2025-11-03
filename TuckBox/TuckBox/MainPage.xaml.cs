@@ -61,8 +61,8 @@ public partial class MainPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await LoadCurrentOrder();   // 👈 NEW
-        await LoadUserName();   // 👈 NEW
+        await LoadCurrentOrder();   
+        await LoadUserName();   
 
     }
 
