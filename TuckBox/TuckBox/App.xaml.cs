@@ -27,7 +27,7 @@ namespace TuckBox
             {
                 try
                 {
-                    await Task.Yield(); // ensure Shell.Current is available
+                    await Task.Yield(); // Check Shell.Current is available
                     if (Shell.Current is not null)
                         await Shell.Current.GoToAsync("//Splash");
                 }
