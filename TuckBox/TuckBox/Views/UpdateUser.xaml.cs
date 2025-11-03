@@ -8,7 +8,7 @@ public partial class UpdateUser : ContentPage
 {
     private readonly FirebaseAuthService _auth;
     private readonly FirebaseDbService _db;
-    private readonly AppDb _localDb;   // for local mirror
+    private readonly AppDb _localDb;   // Local Mirror
     private User? _currentUser;
 
     public UpdateUser(FirebaseAuthService auth, FirebaseDbService db, AppDb localDb)
@@ -63,12 +63,9 @@ public partial class UpdateUser : ContentPage
                 FirstNameEntry.Text = user.First_Name;
                 LastNameEntry.Text = user.Last_Name;
                 EmailEntry.Text = user.User_Email;
-                MobileEntry.Text = user.Mobile;
-
-                // address if you have it
+                MobileEntry.Text = user.Mobile
                 AddressEntry.Text = user.Delivery_Address;
 
-                // try match city in picker
                 if (!string.IsNullOrEmpty(user.City_ID) && CityPicker.ItemsSource is List<City> cities)
                 {
                     var match = cities.FirstOrDefault(c => c.City_ID == user.City_ID);
@@ -113,7 +110,7 @@ public partial class UpdateUser : ContentPage
 
         try
         {
-            // 1) push to Firebase
+            // 1) POST: Firebase
             var ok = await _db.UpsertUserProfileAsync(_currentUser, _auth.CurrentIdToken!);
             if (!ok)
             {

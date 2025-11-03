@@ -32,7 +32,6 @@
             <Entry x:Name="MobileEntry"
                    Placeholder="Mobile" />
 
-            <!-- extra: default delivery address -->
             <Entry x:Name="AddressEntry"
                    Placeholder="Delivery address (optional)" />
 
