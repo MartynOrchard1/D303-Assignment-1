@@ -57,7 +57,7 @@ namespace TuckBox.Services
             }
         }
 
-        // -------- TimeSlots --------
+        // TimeSlots
         public async Task<Dictionary<string, TimeSlot>> GetTimeSlotsAsync()
         {
             try
