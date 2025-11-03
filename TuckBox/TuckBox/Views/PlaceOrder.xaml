@@ -59,36 +59,23 @@
 
                                 <!-- Options -->
                                 <VerticalStackLayout Spacing="6">
-                                    <Label Text="{Binding Option_Key}"
-                                           FontSize="13"
-                                           FontAttributes="Bold"
-                                           TextColor="#2B0B98" />
-
-                                    <!-- radios rendered from Option_Values -->
-                                    <FlexLayout
-                                        Direction="Row"
-                                        Wrap="Wrap"
-                                        AlignItems="Center"
-                                        JustifyContent="Start"
+                                    <Label Text="{Binding Option_Key}" FontAttributes="Bold"/>
+                                    <HorizontalStackLayout
+                                        x:Name="OptionsHost"
+                                        Spacing="12"
                                         BindableLayout.ItemsSource="{Binding Option_Values}">
                                         <BindableLayout.ItemTemplate>
                                             <DataTemplate>
                                                 <RadioButton
-                                                    Visual="Material"
-                                                    Margin="0,4,8,0"
-                                                    Content="{Binding .}"
-                                                    Value="{Binding .}"
-                                                    TextColor="#1F2933"
-                                                    GroupName="{Binding Source={x:Reference RowRoot}, Path=BindingContext.Food_ID}"
-                                                    CheckedChanged="OnOptionChecked">
-                                                    <RadioButton.Shadow>
-                                                        <Shadow Radius="4" Opacity="0.15" />
-                                                    </RadioButton.Shadow>
-                                                </RadioButton>
+                                                Content="{Binding .}"
+                                                Value="{Binding .}"
+                                                GroupName="{Binding Source={x:Reference RowRoot}, Path=BindingContext.Food_ID}"
+                                                CheckedChanged="OnOptionChecked" />
                                             </DataTemplate>
                                         </BindableLayout.ItemTemplate>
-                                    </FlexLayout>
+                                    </HorizontalStackLayout>
                                 </VerticalStackLayout>
+
 
                                 <!-- Quantity row -->
                                 <HorizontalStackLayout Spacing="12" VerticalOptions="Center">

@@ -78,9 +78,9 @@ public partial class RegisterViewModel : ObservableObject
         await _localDb.Conn.InsertOrReplaceAsync(profile);
 
         StatusMessage = "Registration successful!";
-        await Shell.Current.GoToAsync("Login"); // relative (route-only page)
+        await Shell.Current.GoToAsync("//Login"); // relative (route-only page)
     }
 
     [RelayCommand]
-    private async Task GoToLoginAsync() => await Shell.Current.GoToAsync("Login");
+    private async Task GoToLoginAsync() => await Shell.Current.GoToAsync("//Login");
 }
