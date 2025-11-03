@@ -32,7 +32,6 @@
                             BackgroundColor="#FFF7F1"
                             BorderColor="#FFD5B3">
 
-                            <!-- Keep your same names/bindings so code-behind works -->
                             <VerticalStackLayout x:Name="RowRoot" Spacing="10">
 
                                 <!-- Title + price -->
@@ -60,16 +59,16 @@
                                 <VerticalStackLayout Spacing="4" Margin="0,4,0,0">
                                     <!-- Option title -->
                                     <Label Text="{Binding Option_Key, StringFormat='{0} Options'}"
-           FontSize="13"
-           FontAttributes="Bold"
-           TextColor="#2B0B98"
-           Margin="0,4,0,2"/>
+                                       FontSize="13"
+                                       FontAttributes="Bold"
+                                       TextColor="#2B0B98"
+                                       Margin="0,4,0,2"/>
 
                                     <!-- Contextual hint -->
                                     <Label x:Name="OptionHint"
-           FontSize="12"
-           TextColor="Gray"
-           Margin="0,0,0,4">
+                                       FontSize="12"
+                                       TextColor="Gray"
+                                       Margin="0,0,0,4">
                                         <Label.Triggers>
                                             <DataTrigger TargetType="Label" Binding="{Binding Option_Key}" Value="spice">
                                                 <Setter Property="Text" Value="Choose how spicy you'd like it." />
