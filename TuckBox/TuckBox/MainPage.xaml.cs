@@ -150,7 +150,7 @@ public partial class MainPage : ContentPage
     {
         try
         {
-            _auth.SignOut(); // clear tokens/secure storage
+            _auth.SignOut(); // clear tokens
 
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
