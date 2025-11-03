@@ -35,7 +35,7 @@ public partial class LoginViewModel : ObservableObject
             System.Diagnostics.Debug.WriteLine($"[DEBUG] Login success, Firebase UID={uid}");
             StatusMessage = "Login successful!";
 
-            // ✅ confirm token is set
+            // Confirm token is set
             if (string.IsNullOrEmpty(_auth.CurrentIdToken))
             {
                 System.Diagnostics.Debug.WriteLine("[DEBUG] Waiting for ID token...");

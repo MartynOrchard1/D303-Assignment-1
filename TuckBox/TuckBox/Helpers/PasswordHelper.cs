@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 
 namespace TuckBox.Helpers
 {
-    internal class PasswordHelper
+    internal class PasswordHelper // Basically just a SHA256 hasher
     {
         public static string HashPassword(string password)
         {

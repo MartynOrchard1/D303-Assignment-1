@@ -10,8 +10,8 @@ public partial class PlaceOrder : ContentPage
     private readonly FirebaseAuthService _auth;
 
     private readonly ObservableCollection<Food> _foods = new();
-    private readonly Dictionary<string, int> _qty = new();                 // Food_ID -> qty
-    private readonly Dictionary<string, string> _selectedOption = new();   // Food_ID -> option value
+    private readonly Dictionary<string, int> _qty = new();                 
+    private readonly Dictionary<string, string> _selectedOption = new();   
 
     public PlaceOrder(FirebaseDbService db, FirebaseAuthService auth)
     {
@@ -42,14 +42,12 @@ public partial class PlaceOrder : ContentPage
             // Load cities & slots
             var cities = await _db.GetCitiesAsync();
             CityPicker.ItemsSource = cities.Values.ToList();
-            // NEW: show city name
             CityPicker.ItemDisplayBinding = new Binding(nameof(City.City_Name));
 
 
             var slots = await _db.GetTimeSlotsAsync();
             SlotPicker.ItemsSource = slots.Values.ToList();
            
-            // NEW: show time slot text
             SlotPicker.ItemDisplayBinding = new Binding(nameof(TimeSlot.Time_Slot));
 
             // Load addresses for current user
@@ -57,7 +55,6 @@ public partial class PlaceOrder : ContentPage
             {
                 var addrs = await _db.GetUserAddressesAsync(_auth.CurrentUserId);
                 AddressPicker.ItemsSource = addrs.Values.ToList();
-                // NEW: show address line
                 AddressPicker.ItemDisplayBinding = new Binding(nameof(DeliveryAddress.Address));
             }
 
@@ -69,7 +66,6 @@ public partial class PlaceOrder : ContentPage
             System.Diagnostics.Debug.WriteLine($"[ERROR] LoadDataAsync: {ex.Message}");
         }
     }
-
     private async void OnAddAddressClicked(object sender, EventArgs e)
     {
         if (string.IsNullOrEmpty(_auth.CurrentUserId))
@@ -78,7 +74,6 @@ public partial class PlaceOrder : ContentPage
             return;
         }
 
-        // ask for a single-line address (simple for the assignment)
         var text = await DisplayPromptAsync(
             "New Address",
             "Enter your delivery address:",
@@ -114,17 +109,15 @@ public partial class PlaceOrder : ContentPage
     // Radio selection handler for options
     private void OnOptionChecked(object sender, CheckedChangedEventArgs e)
     {
-        // e.Value is bool (checked?)
+        // e.Value is bool 
         if (!e.Value) return;
 
         if (sender is not RadioButton rb) return;
 
-        // Find the row root and get its binding context (Food)
         var rowRoot = rb.FindParent<Layout>();
         var food = rowRoot?.BindingContext as Food;
         if (food == null) return;
 
-        // rb.Value is object; we expect string (the option value)
         var selected = rb.Value as string ?? string.Empty;
         _selectedOption[food.Food_ID] = selected;
     }
@@ -141,7 +134,7 @@ public partial class PlaceOrder : ContentPage
         var q = _qty.TryGetValue(food.Food_ID, out var cur) ? cur : 0;
         q++;
         _qty[food.Food_ID] = q;
-        qtyLabel.Text = q.ToString(); // ✅ string
+        qtyLabel.Text = q.ToString();
     }
 
     private void OnMinusClicked(object sender, EventArgs e)
@@ -155,7 +148,7 @@ public partial class PlaceOrder : ContentPage
         var q = _qty.TryGetValue(food.Food_ID, out var cur) ? cur : 0;
         q = Math.Max(0, q - 1);
         _qty[food.Food_ID] = q;
-        qtyLabel.Text = q.ToString(); // ✅ string
+        qtyLabel.Text = q.ToString(); 
     }
 
     private async void OnPlaceOrderClicked(object sender, EventArgs e)
@@ -229,7 +222,7 @@ public partial class PlaceOrder : ContentPage
     }
 }
 
-    // Small visual tree helper
+    // Helper
     static class VisualTreeExtensions
 {
     public static T? FindParent<T>(this Element element) where T : Element
