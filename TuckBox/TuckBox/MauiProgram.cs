@@ -21,7 +21,7 @@ namespace TuckBox
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            // ✅ Load configuration ONCE from appsettings.json
+            // Load Config from appsettings.json
             var cfg = LoadConfig();
             var apiKey = cfg["FirebaseApiKey"];
             var dbUrl = cfg["FirebaseDbUrl"];
