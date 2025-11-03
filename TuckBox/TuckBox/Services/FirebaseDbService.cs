@@ -19,7 +19,7 @@ namespace TuckBox.Services
             _auth = auth;
         }
 
-        // Fallback: public-rules mode (no token)
+        // Fallback: public-rules mode (no token) 
         public FirebaseDbService(string dbUrl)
         {
             _dbUrl = dbUrl.TrimEnd('/');
@@ -37,7 +37,7 @@ namespace TuckBox.Services
             return final;
         }
 
-        // -------- Cities --------
+        // Cities 
         public async Task<Dictionary<string, City>> GetCitiesAsync()
         {
             try
