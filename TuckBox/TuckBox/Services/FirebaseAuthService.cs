@@ -41,7 +41,7 @@ public class FirebaseAuthService
 
             var doc = JsonDocument.Parse(body);
 
-            // ✅ ADDED: capture ID token + UID
+            // Capture ID token + UID
             CurrentIdToken = doc.RootElement.GetProperty("idToken").GetString();
             CurrentUserId = doc.RootElement.GetProperty("localId").GetString();
 
