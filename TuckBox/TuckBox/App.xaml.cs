@@ -63,7 +63,6 @@ namespace TuckBox
             {
                 await conn.InsertAllAsync(new[]
                 {
-                    // 👇 Use property names that match your model class
                     new City { City_ID = Guid.NewGuid().ToString(), City_Name = "Palmerston North" },
                     new City { City_ID = Guid.NewGuid().ToString(), City_Name = "Feilding" },
                     new City { City_ID = Guid.NewGuid().ToString(), City_Name = "Ashhurst" },
@@ -77,7 +76,6 @@ namespace TuckBox
             {
                 await conn.InsertAllAsync(new[]
                 {
-                    // 👇 Match your model’s property names (TimeSlot_ID vs Time_Slot_ID)
                     new TimeSlot { TimeSlot_ID = Guid.NewGuid().ToString(), Time_Slot = "11:45–12:15" },
                     new TimeSlot { TimeSlot_ID = Guid.NewGuid().ToString(), Time_Slot = "12:15–12:45" },
                     new TimeSlot { TimeSlot_ID = Guid.NewGuid().ToString(), Time_Slot = "12:45–1:15"  },
