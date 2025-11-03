@@ -9,10 +9,9 @@ namespace TuckBox.Services
     {
         private readonly string _dbUrl;
         private readonly HttpClient _http;
-        private readonly FirebaseAuthService? _auth; // optional (public-rules mode supported)
+        private readonly FirebaseAuthService? _auth; 
 
 
-        // Preferred: secure rules (auth != null)
         public FirebaseDbService(string dbUrl, FirebaseAuthService auth)
         {
             _dbUrl = dbUrl.TrimEnd('/');
