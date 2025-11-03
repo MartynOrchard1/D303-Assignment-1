@@ -205,7 +205,7 @@ namespace TuckBox.Services
             }
         }
 
-        // -------- Orders (Orders/{uid}/{orderId}) --------
+        // Orders (Orders/{uid}/{orderId}) 
 
             public async Task<bool> PlaceOrderAsync(
                 string userId,
