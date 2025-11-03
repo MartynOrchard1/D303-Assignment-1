@@ -222,7 +222,7 @@ public partial class PlaceOrder : ContentPage
     }
 }
 
-    // Small visual tree helper
+    // Helper
     static class VisualTreeExtensions
 {
     public static T? FindParent<T>(this Element element) where T : Element
